@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Связаться — Likon Auto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      height: 65vh; min-height: 460px;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+    }
+    .page-hero::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 200px; background: linear-gradient(to bottom, transparent, rgba(3,3,3,0.97));
+    }
+    .page-hero-content { position: relative; z-index: 1; max-width: 700px; padding: 0 24px; }
+    .page-hero-title {
+      font-family: var(--display); font-size: clamp(52px, 9vw, 110px);
+      font-weight: 300; line-height: 1.0; margin-top: 14px;
+      text-shadow: 0 4px 32px rgba(0,0,0,0.7);
+    }
+    .page-hero-sub {
+      margin-top: 20px; font-size: 16px; color: var(--w70);
+      font-weight: 300; line-height: 1.8;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+    }
+
+    /* ── CONTACT CHANNELS ── */
+    .channels-wrap {
+      background: rgba(3,3,3,0.95);
+      border-top: 1px solid var(--border);
+      padding: 88px 52px;
+    }
+    .channels-inner { max-width: 1320px; margin: 0 auto; }
+    .channels-grid {
+      display: grid; grid-template-columns: repeat(2,1fr); gap: 20px; margin-top: 52px;
+    }
+    .channel-card {
+      border: 1px solid var(--border);
+      padding: 44px 40px;
+      display: flex; flex-direction: column; gap: 0;
+      transition: border-color 0.3s, transform 0.3s;
+      background: rgba(255,255,255,0.02);
+    }
+    .channel-card:hover { border-color: rgba(208,95,0,0.35); transform: translateY(-4px); }
+    .channel-icon { font-size: 32px; margin-bottom: 20px; }
+    .channel-name { font-size: 10px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .channel-title { font-family: var(--display); font-size: 32px; font-weight: 300; margin-bottom: 16px; }
+    .channel-desc { font-size: 14px; color: var(--w70); line-height: 1.85; margin-bottom: 32px; flex: 1; }
+    .channel-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.06); color: var(--w40);
+      padding: 13px 28px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      border: 1px solid var(--border);
+      cursor: default; align-self: flex-start;
+      pointer-events: none;
+    }
+    a.channel-btn.active-btn {
+      background: var(--gold); color: #000;
+      border-color: var(--gold);
+      cursor: pointer; pointer-events: auto;
+      transition: background 0.2s, transform 0.2s;
+    }
+    a.channel-btn.active-btn:hover { background: var(--gold-l); transform: translateY(-2px); }
+    .soon-badge {
+      display: inline-block;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(208,95,0,0.4);
+      padding: 3px 8px; margin-left: 8px;
+    }
+
+    /* ── INFO ── */
+    .info-wrap {
+      background: transparent;
+      padding: 88px 52px;
+    }
+    .info-inner { max-width: 1320px; margin: 0 auto; }
+    .info-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 52px; }
+    .info-card {
+      padding: 36px 32px;
+      border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(14px);
+    }
+    .info-card-label { font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+    .info-card-value { font-family: var(--display); font-size: 24px; font-weight: 300; margin-bottom: 10px; }
+    .info-card-sub { font-size: 13px; color: var(--w70); line-height: 1.8; }
+
+    /* ── HOW TO START ── */
+    .how-wrap {
+      background: rgba(3,3,3,0.93);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 88px 52px;
+    }
+    .how-inner { max-width: 1320px; margin: 0 auto; }
+    .how-steps { display: flex; flex-direction: column; gap: 0; margin-top: 52px; }
+    .how-step {
+      display: flex; gap: 32px; padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .how-step:last-child { border-bottom: none; }
+    .how-step-num {
+      font-family: var(--display); font-size: 44px; font-weight: 300;
+      color: var(--gold); line-height: 1; flex-shrink: 0; width: 56px;
+    }
+    .how-step-content {}
+    .how-step-title { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+    .how-step-desc { font-size: 14px; color: var(--w70); line-height: 1.85; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .channels-wrap, .how-wrap { padding: 64px 22px; }
+      .info-wrap { padding: 64px 22px; }
+      .channels-grid { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; gap: 14px; }
+      .how-step { gap: 20px; }
+      .how-step-num { font-size: 32px; width: 40px; }
+    }
+    @media (min-width:769px) and (max-width:1050px) {
+      .channels-wrap, .how-wrap, .info-wrap { padding: 72px 28px; }
+      .info-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── LIGHT THEME OVERRIDES ── */
+    body.light .channels-wrap { background: #fff; border-color: rgba(0,0,0,0.08); }
+    body.light .channel-card { background: #fff; border-color: rgba(0,0,0,0.09); }
+    body.light .how-wrap { background: #fff; border-color: rgba(0,0,0,0.08); }
+    .info-wrap { position: relative; }
+    .info-inner { position: relative; z-index: 1; }
+    body.light .info-wrap {
+      --white: #fff; --w70: rgba(255,255,255,0.7); --w40: rgba(255,255,255,0.4);
+      --w15: rgba(255,255,255,0.15); --border: rgba(255,255,255,0.09); color: #fff;
+    }
+    body.light .info-wrap::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.62); z-index: 0; pointer-events: none;
+    }
+    body.light .info-card { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.1); backdrop-filter: blur(14px); }
+  </style>
+</head>
+<body>
+
+<!-- FIXED BG -->
+<div class="page-bg" style="background-image:url('/images/hero-bg.jpg')"></div>
+<div class="page-overlay"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto">
+    </a>
+    <ul class="nav-links">
+      <li class="nav-toggle-desktop"><button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button></li>
+      <li class="nav-lang-desktop"><button class="lang-toggle" onclick="toggleLang()"><span class="lang-label">EN</span></button></li>
+      <li><a href="/catalog.html" data-i18n="nav.catalog">Каталог</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+      <li><a href="/contact.html" class="nav-btn active" data-i18n="nav.contact">Связаться</a></li>
+    </ul>
+    <button class="lang-toggle nav-lang-mobile" onclick="toggleLang()"><span class="lang-label">EN</span></button>
+    <button class="theme-toggle nav-toggle-mobile" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button>
+    <button class="nav-ham" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/catalog.html" data-i18n="nav.catalog">Каталог</a>
+  <a href="/about.html" data-i18n="nav.about">О нас</a>
+  <a href="/contact.html" data-i18n="nav.contact">Связаться</a>
+</div>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <span class="section-label">Likon Auto</span>
+    <h1 class="page-hero-title" data-i18n="contact.hero.title">Связаться</h1>
+    <p class="page-hero-sub" data-i18n="contact.hero.sub">Расскажите, что ищете — мы найдём и доставим.</p>
+  </div>
+</div>
+
+<!-- CHANNELS -->
+<div class="channels-wrap">
+  <div class="channels-inner">
+    <span class="section-label" data-i18n="contact.channels.label">Как с нами связаться</span>
+    <h2 class="section-title" data-i18n="contact.channels.title">Выберите удобный способ</h2>
+    <div class="section-rule"></div>
+    <div class="channels-grid">
+      <div class="channel-card">
+        <div class="channel-icon">💬</div>
+        <div class="channel-name">WhatsApp</div>
+        <div class="channel-title" data-i18n="contact.wa.title">Написать сейчас</div>
+        <div class="channel-desc" data-i18n="contact.wa.desc">Напишите нам — ответим на все вопросы и поможем с выбором.</div>
+        <a href="https://wa.me/821090905971" target="_blank" class="channel-btn active-btn">WhatsApp →</a>
+      </div>
+      <div class="channel-card">
+        <div class="channel-icon">✈️</div>
+        <div class="channel-name">Telegram</div>
+        <div class="channel-title" data-i18n="contact.tg.title">Написать в Telegram</div>
+        <div class="channel-desc" data-i18n="contact.tg.desc">Свяжитесь с нами или подпишитесь на канал, чтобы следить за новыми поступлениями.</div>
+        <span class="channel-btn">Telegram <span class="soon-badge" data-i18n="contact.tg.soon">Скоро</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFO -->
+<div class="info-wrap">
+  <div class="info-inner">
+    <span class="section-label" data-i18n="contact.info.label">Информация</span>
+    <h2 class="section-title" data-i18n="contact.info.title">Где мы находимся</h2>
+    <div class="section-rule"></div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-label" data-i18n="contact.info.loc.label">Местоположение</div>
+        <div class="info-card-value" data-i18n="contact.info.loc.value">Южная Корея</div>
+        <div class="info-card-sub" data-i18n="contact.info.loc.sub">Работаем с клиентами из любых стран. Доставка по всему миру.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label" data-i18n="contact.info.hours.label">Время работы</div>
+        <div class="info-card-value" data-i18n="contact.info.hours.value">Пн–Вс</div>
+        <div class="info-card-sub" data-i18n="contact.info.hours.sub">Отвечаем с 9:00 до 21:00 по корейскому времени (UTC+9).</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label" data-i18n="contact.info.lang.label">Языки</div>
+        <div class="info-card-value">RU · EN · KO</div>
+        <div class="info-card-sub" data-i18n="contact.info.lang.sub">Общаемся на русском, английском и корейском языках.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO START -->
+<div class="how-wrap">
+  <div class="how-inner">
+    <span class="section-label" data-i18n="contact.how.label">С чего начать</span>
+    <h2 class="section-title" data-i18n="contact.how.title">Как сделать заявку</h2>
+    <div class="section-rule"></div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <div class="how-step-content">
+          <div class="how-step-title" data-i18n="contact.how.1.title">Выберите или опишите автомобиль</div>
+          <div class="how-step-desc" data-i18n="contact.how.1.desc">Просмотрите каталог или напишите нам параметры: марка, модель, год, бюджет, цвет. Любые пожелания приветствуются.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">2</div>
+        <div class="how-step-content">
+          <div class="how-step-title" data-i18n="contact.how.2.title">Получите предложение</div>
+          <div class="how-step-desc" data-i18n="contact.how.2.desc">Мы подберём варианты на корейском рынке с ценами, фото и историей. Обычно это занимает от нескольких часов до суток.</div>
+        </div>
+      </div>
+      <div class="how-step">
+        <div class="how-step-num">3</div>
+        <div class="how-step-content">
+          <div class="how-step-title" data-i18n="contact.how.3.title">Согласуйте и подтвердите</div>
+          <div class="how-step-desc" data-i18n="contact.how.3.desc">После согласования всех условий организуем покупку и доставку. Вы получаете автомобиль в порту назначения.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto"></div>
+        <p class="footer-desc" data-i18n="footer.desc">Экспорт премиальных и люксовых автомобилей из Южной Кореи по всему миру.</p>
+        <div class="footer-social-icons">
+          <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title" data-i18n="footer.nav">Навигация</p>
+        <ul class="footer-nav">
+          <li><a href="/catalog.html" data-i18n="nav.catalog">Каталог</a></li>
+          <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+          <li><a href="/contact.html" data-i18n="nav.contact">Связаться</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title" data-i18n="footer.contacts">Контакты</p>
+        <p class="footer-contact">
+          <span data-i18n="footer.location">Южная Корея</span><br>
+          <a href="https://wa.me/821090905971" target="_blank">+82 10-9090-5971</a><br>
+          <span style="color:rgba(255,255,255,0.2)">Telegram</span>
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy" data-i18n="footer.copy">© 2025 Likon Auto. Все права защищены.</p>
+      <div class="footer-socials">
+        <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/lang.js"></script>
+<script>
+function toggleNav() { document.getElementById('navMobile').classList.toggle('open'); }
+window.addEventListener('scroll', ()=>{ document.getElementById('nav').classList.toggle('solid', scrollY>40); });
+(function(){
+  const saved = localStorage.getItem('likonTheme');
+  if(saved === 'light') { document.body.classList.add('light'); }
+  function syncIcon() {
+    const isLight = document.body.classList.contains('light');
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+      btn.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+  }
+  syncIcon();
+  window.toggleTheme = function() {
+    document.body.classList.toggle('light');
+    localStorage.setItem('likonTheme', document.body.classList.contains('light') ? 'light' : 'dark');
+    syncIcon();
+  };
+})();
+</script>
+</body>
+</html>

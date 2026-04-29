@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог — Likon Auto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* ── PAGE HEADER ── */
+    .cat-header {
+      height: 280px;
+      display: flex; align-items: flex-end;
+      position: relative;
+    }
+    .cat-header::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 180px; background: linear-gradient(to bottom, transparent, rgba(2,2,2,1));
+    }
+    .cat-header-content {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 1320px; margin: 0 auto;
+      padding: 0 52px 36px;
+    }
+    .cat-header-title {
+      font-family: var(--display);
+      font-size: clamp(42px, 5vw, 68px);
+      font-weight: 300; line-height: 1;
+      text-shadow: 0 4px 24px rgba(0,0,0,0.8);
+    }
+    .cat-header-sub {
+      font-size: 13px; color: var(--w40); margin-top: 8px; letter-spacing: 0.04em;
+    }
+
+    /* ── LAYOUT ── */
+    .cat-wrap {
+      background: rgba(2,2,2,1);
+      border-top: 1px solid var(--border);
+      min-height: 80vh;
+    }
+    .cat-layout {
+      display: grid;
+      grid-template-columns: 288px 1fr;
+      align-items: start;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    /* ── SIDEBAR ── */
+    .cat-sidebar {
+      position: sticky; top: 70px;
+      max-height: calc(100vh - 70px);
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+    .cat-sidebar::-webkit-scrollbar { width: 3px; }
+    .cat-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--w40);
+    }
+    .sidebar-reset-all {
+      font-size: 10px; color: var(--gold); cursor: pointer;
+      background: none; border: none; font-family: var(--body);
+      letter-spacing: 0.05em; padding: 0; transition: color 0.2s;
+    }
+    .sidebar-reset-all:hover { color: var(--gold-l); }
+    .sidebar-reset-all.hidden { visibility: hidden; }
+
+    /* Filter section */
+    .f-section { border-bottom: 1px solid var(--border); }
+    .f-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 20px; cursor: pointer;
+      transition: background 0.15s; user-select: none;
+    }
+    .f-head:hover { background: rgba(255,255,255,0.02); }
+    .f-name {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--white);
+    }
+    .f-arrow { font-size: 9px; color: var(--w40); transition: transform 0.2s; }
+    .f-section.open .f-arrow { transform: rotate(180deg); }
+    .f-body { display: none; padding: 8px 20px 16px; }
+    .f-section.open .f-body { display: block; }
+
+    /* Brand tree */
+    .brand-item { margin-bottom: 1px; }
+    .brand-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 0; cursor: pointer;
+    }
+    .brand-row:hover .b-label { color: var(--white); }
+    .b-check {
+      width: 14px; height: 14px; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .b-check.on { background: var(--gold); border-color: var(--gold); }
+    .b-check.on::after {
+      content: ''; display: block;
+      width: 7px; height: 4px;
+      border-left: 1.5px solid #000; border-bottom: 1.5px solid #000;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    .b-label { font-size: 13px; color: var(--w70); flex: 1; transition: color 0.15s; }
+    .b-count { font-size: 10px; color: var(--w40); }
+    .b-expand {
+      font-size: 9px; color: var(--w40); padding: 2px 4px;
+      transition: transform 0.2s; cursor: pointer; flex-shrink: 0;
+    }
+    .brand-item.expanded .b-expand { transform: rotate(90deg); }
+    .b-models { display: none; padding-left: 22px; margin-top: 2px; }
+    .brand-item.expanded .b-models { display: block; }
+    .model-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 0; cursor: pointer;
+    }
+    .model-row:hover .m-label { color: var(--white); }
+    .m-check {
+      width: 12px; height: 12px; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .m-check.on { background: var(--gold); border-color: var(--gold); }
+    .m-check.on::after {
+      content: ''; display: block; width: 4px; height: 4px;
+      border-radius: 50%; background: #000;
+    }
+    .m-label { font-size: 12px; color: rgba(255,255,255,0.45); flex: 1; transition: color 0.15s; }
+    .m-count { font-size: 10px; color: var(--w40); }
+
+    /* Range inputs */
+    .range-row { display: flex; gap: 6px; align-items: center; }
+    .r-input {
+      flex: 1; min-width: 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); color: var(--white);
+      padding: 8px 10px; font-size: 12px; font-family: var(--body);
+      outline: none; transition: border-color 0.2s;
+    }
+    .r-input:focus { border-color: rgba(208,95,0,0.45); }
+    .r-input::placeholder { color: var(--w40); }
+    .r-sep { font-size: 11px; color: var(--w40); flex-shrink: 0; }
+
+    /* Checkbox list */
+    .chk-list { display: flex; flex-direction: column; gap: 1px; }
+    .chk-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 0; cursor: pointer;
+    }
+    .chk-row:hover .chk-label { color: var(--white); }
+    .chk-box {
+      width: 14px; height: 14px; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.18);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .chk-box.on { background: var(--gold); border-color: var(--gold); }
+    .chk-box.on::after {
+      content: ''; display: block; width: 7px; height: 4px;
+      border-left: 1.5px solid #000; border-bottom: 1.5px solid #000;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+    .chk-label { font-size: 13px; color: var(--w70); flex: 1; transition: color 0.15s; }
+    .chk-count { font-size: 10px; color: var(--w40); }
+
+    /* ── MAIN ── */
+    .cat-main { padding: 32px 36px 80px; }
+
+    /* Active filter tags */
+    .active-tags {
+      display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px;
+    }
+    .active-tags:empty { display: none; }
+    .a-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(208,95,0,0.1); border: 1px solid rgba(208,95,0,0.3);
+      color: var(--gold); padding: 5px 10px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .a-tag:hover { background: rgba(208,95,0,0.2); }
+
+    /* Sort bar */
+    .sort-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 28px;
+      gap: 14px; flex-wrap: wrap;
+    }
+    .sort-count { font-size: 13px; color: var(--w40); }
+    .sort-count b { color: var(--white); font-weight: 600; }
+    .sort-select {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); color: var(--white);
+      padding: 9px 34px 9px 12px;
+      font-size: 11px; font-family: var(--body); letter-spacing: 0.06em;
+      cursor: pointer; outline: none; appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 11px center;
+      transition: border-color 0.2s;
+    }
+    .sort-select:focus { border-color: rgba(208,95,0,0.4); }
+    .sort-select option { background: #111; }
+
+    /* Car grid */
+    .cars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .car-card {
+      display: block; color: var(--white);
+      background: rgba(10,10,10,0.95);
+      border: 1px solid var(--border); overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    }
+    .car-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.7);
+      border-color: rgba(208,95,0,0.3);
+    }
+    .car-img { aspect-ratio: 16/10; overflow: hidden; }
+    .car-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+    .car-card:hover .car-img img { transform: scale(1.06); }
+    .car-body { padding: 18px 20px 22px; }
+    .car-brand-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+    .car-model-lbl { font-family: var(--display); font-size: 22px; font-weight: 400; margin-bottom: 12px; }
+    .car-specs-row { display: flex; align-items: center; gap: 5px; margin-bottom: 14px; flex-wrap: wrap; }
+    .cs { font-size: 11px; color: var(--w70); }
+    .cd { width: 2px; height: 2px; background: var(--w15); border-radius: 50%; flex-shrink: 0; }
+    .car-price-lbl { font-size: 19px; font-weight: 600; margin-bottom: 16px; }
+    .car-price-lbl.req { font-size: 11px; font-weight: 400; color: var(--w40); letter-spacing: 0.08em; text-transform: uppercase; }
+    .car-link-lbl {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); border-bottom: 1px solid rgba(208,95,0,0.25); padding-bottom: 2px;
+      transition: gap 0.2s, border-color 0.2s;
+    }
+    .car-card:hover .car-link-lbl { gap: 11px; border-color: var(--gold); }
+
+    /* Empty state */
+    .no-cars { grid-column: 1/-1; text-align: center; padding: 80px 24px; }
+    .no-cars-title { font-family: var(--display); font-size: 28px; font-weight: 300; color: var(--w70); margin-bottom: 8px; }
+    .no-cars-sub { font-size: 13px; color: var(--w40); margin-bottom: 28px; }
+
+    /* Loader dots */
+    .cars-loader { grid-column: 1/-1; display: flex; justify-content: center; padding: 80px; gap: 8px; }
+    .cars-loader span { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; animation: ld 1.2s ease-in-out infinite; }
+    .cars-loader span:nth-child(2) { animation-delay: .2s; }
+    .cars-loader span:nth-child(3) { animation-delay: .4s; }
+    @keyframes ld { 0%,80%,100%{opacity:.25;transform:scale(.8)} 40%{opacity:1;transform:scale(1.2)} }
+
+    /* Mobile filter button */
+    .mobile-filter-btn {
+      display: none;
+      align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      color: var(--white); padding: 10px 18px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      font-family: var(--body); cursor: pointer; transition: border-color 0.2s;
+    }
+    .mobile-filter-btn:hover { border-color: var(--w40); }
+
+    /* Mobile sidebar overlay */
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7); z-index: 200;
+    }
+    .sidebar-overlay.open { display: block; }
+    .sidebar-drawer {
+      position: fixed; top: 0; left: 0; bottom: 0; width: 300px;
+      background: #0a0a0a; z-index: 201; overflow-y: auto;
+      transform: translateX(-100%); transition: transform 0.3s ease;
+    }
+    .sidebar-drawer.open { transform: translateX(0); }
+    .drawer-close {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 20px; border-bottom: 1px solid var(--border);
+    }
+    .drawer-close-title { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); }
+    .drawer-close-btn { background: none; border: none; color: var(--w40); font-size: 18px; cursor: pointer; transition: color 0.2s; }
+    .drawer-close-btn:hover { color: var(--white); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1200px) {
+      .cars-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 900px) {
+      .cat-layout { grid-template-columns: 1fr; }
+      .cat-sidebar { display: none; }
+      .mobile-filter-btn { display: flex; }
+      .cat-main { padding: 24px 22px 60px; }
+      .sort-bar { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 600px) {
+      .cars-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+      .cat-header-content { padding: 0 22px 28px; }
+      .car-body { padding: 10px 12px 14px; }
+      .car-model-lbl { font-size: 16px; margin-bottom: 8px; }
+      .car-specs-row { gap: 3px; margin-bottom: 10px; }
+      .car-price-lbl { font-size: 15px; margin-bottom: 12px; }
+      .car-price-lbl.req { font-size: 10px; }
+    }
+
+    /* ── LIGHT THEME OVERRIDES ── */
+    body.light .cat-wrap { background: #fff; }
+    body.light .cat-sidebar { background: #fff; border-right-color: rgba(0,0,0,0.08); }
+    body.light .sidebar-section { border-bottom-color: rgba(0,0,0,0.08); }
+    body.light .brand-toggle { color: rgba(0,0,0,0.7); }
+    body.light .brand-toggle:hover { color: #111; }
+    body.light .model-item { color: rgba(0,0,0,0.55); }
+    body.light .model-item:hover, body.light .model-item.active { color: #111; }
+    body.light .car-card { background: #fff; border-color: rgba(0,0,0,0.09); }
+    body.light .car-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+    body.light .sidebar-drawer { background: #fff; }
+    /* cat-header stays transparent (hero area with background image) */
+  </style>
+</head>
+<body>
+
+<!-- FIXED BG -->
+<div class="page-bg" style="background-image:url('/images/hero-bg.jpg')"></div>
+<div class="page-overlay"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto">
+    </a>
+    <ul class="nav-links">
+      <li class="nav-toggle-desktop"><button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button></li>
+      <li class="nav-lang-desktop"><button class="lang-toggle" onclick="toggleLang()"><span class="lang-label">EN</span></button></li>
+      <li><a href="/catalog.html" class="active" data-i18n="nav.catalog">Каталог</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+      <li><a href="/contact.html" class="nav-btn" data-i18n="nav.contact">Связаться</a></li>
+    </ul>
+    <button class="lang-toggle nav-lang-mobile" onclick="toggleLang()"><span class="lang-label">EN</span></button>
+    <button class="theme-toggle nav-toggle-mobile" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button>
+    <button class="nav-ham" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/catalog.html" data-i18n="nav.catalog">Каталог</a>
+  <a href="/about.html" data-i18n="nav.about">О нас</a>
+  <a href="/contact.html" data-i18n="nav.contact">Связаться</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="cat-header">
+  <div class="cat-header-content">
+    <span class="section-label">Likon Auto</span>
+    <h1 class="cat-header-title" data-i18n="cat.hero.title">Каталог</h1>
+    <p class="cat-header-sub" data-i18n="cat.hero.sub">Премиальные и люксовые автомобили из Южной Кореи</p>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="cat-wrap">
+<div class="cat-layout">
+
+  <!-- SIDEBAR (desktop) -->
+  <aside class="cat-sidebar" id="catSidebar">
+    <div class="sidebar-top">
+      <span class="sidebar-label" data-i18n="cat.filter.label">Фильтры</span>
+      <button class="sidebar-reset-all hidden" id="resetAll" onclick="resetAllFilters()" data-i18n="cat.filter.reset">Сбросить всё</button>
+    </div>
+    <div id="sidebarContent"></div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="cat-main">
+    <!-- Mobile filter button -->
+    <div style="margin-bottom:20px">
+      <button class="mobile-filter-btn" onclick="openDrawer()">
+        <i class="fa-solid fa-sliders"></i> Фильтры <span id="mobileFilterCount" style="display:none;background:var(--gold);color:#000;padding:1px 6px;font-size:9px;border-radius:2px"></span>
+      </button>
+    </div>
+
+    <!-- Active filter tags -->
+    <div class="active-tags" id="activeTags"></div>
+
+    <!-- Sort bar -->
+    <div class="sort-bar">
+      <span class="sort-count" id="sortCount"><b>0</b> авто</span>
+      <select class="sort-select" id="sortSelect" onchange="applyAndRender()">
+        <option value="default" data-i18n="cat.sort.default">По умолчанию</option>
+        <option value="price_asc" data-i18n="cat.sort.price_asc">Цена: сначала дешевле</option>
+        <option value="price_desc" data-i18n="cat.sort.price_desc">Цена: сначала дороже</option>
+        <option value="year_desc" data-i18n="cat.sort.year_desc">Год: сначала новее</option>
+        <option value="year_asc" data-i18n="cat.sort.year_asc">Год: сначала старше</option>
+        <option value="km_asc" data-i18n="cat.sort.km_asc">Пробег: меньше</option>
+        <option value="km_desc" data-i18n="cat.sort.km_desc">Пробег: больше</option>
+      </select>
+    </div>
+
+    <!-- Grid -->
+    <div class="cars-grid" id="carsGrid">
+      <div class="cars-loader"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MOBILE SIDEBAR DRAWER -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeDrawer()"></div>
+<div class="sidebar-drawer" id="sidebarDrawer">
+  <div class="drawer-close">
+    <span class="drawer-close-title" data-i18n="cat.filter.label">Фильтры</span>
+    <button class="drawer-close-btn" onclick="closeDrawer()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="sidebar-top" style="border-bottom:none;padding-top:14px">
+    <span></span>
+    <button class="sidebar-reset-all hidden" id="resetAllDrawer" onclick="resetAllFilters()" data-i18n="cat.filter.reset">Сбросить всё</button>
+  </div>
+  <div id="drawerContent"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto"></div>
+        <p class="footer-desc" data-i18n="footer.desc">Экспорт премиальных и люксовых автомобилей из Южной Кореи по всему миру.</p>
+        <div class="footer-social-icons">
+          <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title" data-i18n="footer.nav">Навигация</p>
+        <ul class="footer-nav">
+          <li><a href="/catalog.html" data-i18n="nav.catalog">Каталог</a></li>
+          <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+          <li><a href="/contact.html" data-i18n="nav.contact">Связаться</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title" data-i18n="footer.contacts">Контакты</p>
+        <p class="footer-contact">
+          <span data-i18n="footer.location">Южная Корея</span><br>
+          <a href="https://wa.me/821090905971" target="_blank">+82 10-9090-5971</a><br>
+          <span style="color:rgba(255,255,255,0.2)">Telegram</span>
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy" data-i18n="footer.copy">© 2025 Likon Auto. Все права защищены.</p>
+      <div class="footer-socials">
+        <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/lang.js"></script>
+<script>
+/* ── DATA & STATE ── */
+let allCars = [];
+
+const filters = {
+  brands: {},     // { mercedes: { on: false, models: { 'S-Class': false } } }
+  yearFrom: '', yearTo: '',
+  priceFrom: '', priceTo: '',
+  kmFrom: '', kmTo: '',
+  colors: {},         // { 'Чёрный': false }
+  interiorColors: {}, // { 'Бежевый': false }
+  fuels: {},          // { 'Бензин': false }
+};
+
+/* ── FILTER MATCHING ── */
+function carMatches(car) {
+  // Brand / Model
+  const activeBrands = Object.keys(filters.brands).filter(s => {
+    const b = filters.brands[s];
+    return b.on || Object.values(b.models).some(v => v);
+  });
+  if (activeBrands.length) {
+    const bf = filters.brands[car.brandSlug];
+    if (!bf) return false;
+    if (bf.on) { /* brand-level match, ok */ }
+    else {
+      const activeModels = Object.keys(bf.models).filter(m => bf.models[m]);
+      if (!activeModels.length) return false;
+      if (!activeModels.includes(car.model)) return false;
+    }
+  }
+
+  // Year
+  if (filters.yearFrom && car.year < +filters.yearFrom) return false;
+  if (filters.yearTo   && car.year > +filters.yearTo)   return false;
+
+  // Price (0 = по запросу — always pass if price filter is set)
+  if (filters.priceFrom && car.price && car.price < +filters.priceFrom) return false;
+  if (filters.priceTo   && car.price && car.price > +filters.priceTo)   return false;
+
+  // Mileage
+  if (filters.kmFrom && car.mileage < +filters.kmFrom) return false;
+  if (filters.kmTo   && car.mileage > +filters.kmTo)   return false;
+
+  // Exterior color
+  const activeColors = Object.keys(filters.colors).filter(c => filters.colors[c]);
+  if (activeColors.length && !activeColors.includes(car.color)) return false;
+
+  // Interior color
+  const activeInteriorColors = Object.keys(filters.interiorColors).filter(c => filters.interiorColors[c]);
+  if (activeInteriorColors.length && !activeInteriorColors.includes(car.interiorColor)) return false;
+
+  // Fuel
+  const activeFuels = Object.keys(filters.fuels).filter(f => filters.fuels[f]);
+  if (activeFuels.length && !activeFuels.includes(car.fuel)) return false;
+
+  return true;
+}
+
+function sortCars(list) {
+  const s = document.getElementById('sortSelect').value;
+  const sorted = [...list];
+  if (s === 'price_asc') sorted.sort((a,b) => (a.price||Infinity)-(b.price||Infinity));
+  else if (s === 'price_desc') sorted.sort((a,b) => (b.price||0)-(a.price||0));
+  else if (s === 'year_desc') sorted.sort((a,b) => b.year-a.year);
+  else if (s === 'year_asc')  sorted.sort((a,b) => a.year-b.year);
+  else if (s === 'km_asc')    sorted.sort((a,b) => a.mileage-b.mileage);
+  else if (s === 'km_desc')   sorted.sort((a,b) => b.mileage-a.mileage);
+  return sorted;
+}
+
+/* ── RENDER CARS ── */
+function renderCars() {
+  const grid = document.getElementById('carsGrid');
+  const filtered = allCars.filter(carMatches);
+  const sorted   = sortCars(filtered);
+
+  document.getElementById('sortCount').innerHTML = `<b>${sorted.length}</b> ${T('cat.count')}`;
+
+  if (!sorted.length) {
+    grid.innerHTML = `<div class="no-cars">
+      <div class="no-cars-title">${T('cat.nocars.title')}</div>
+      <p class="no-cars-sub">${T('cat.nocars.sub')}</p>
+      <a href="https://wa.me/821090905971" class="btn-gold" target="_blank">${T('cat.nocars.btn')}</a>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = sorted.map(car => {
+    const isReq = !car.price;
+    const price = isReq ? T('car.request') : '$' + car.price.toLocaleString('en-US');
+    return `<a href="/car.html?id=${car.id}" class="car-card">
+      <div class="car-img"><img src="${car.image}" alt="${car.brand} ${car.model}" loading="lazy"></div>
+      <div class="car-body">
+        <div class="car-brand-lbl">${car.brand}</div>
+        <div class="car-model-lbl">${car.model}</div>
+        <div class="car-specs-row">
+          <span class="cs">${car.year}</span>
+          <div class="cd"></div>
+          <span class="cs">${car.color}</span>
+          <div class="cd"></div>
+          <span class="cs">${car.mileage.toLocaleString('ru-RU')} км</span>
+          <div class="cd"></div>
+          <span class="cs">${car.fuel || ''}</span>
+        </div>
+        <div class="car-price-lbl ${isReq?'req':''}">${price}</div>
+        <span class="car-link-lbl">${isReq?T('car.inquire'):T('car.detail')} →</span>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+/* ── ACTIVE FILTER TAGS ── */
+function renderTags() {
+  const cont = document.getElementById('activeTags');
+  const tags = [];
+
+  // Brands / models
+  for (const [slug, bf] of Object.entries(filters.brands)) {
+    if (bf.on) {
+      const label = allCars.find(c => c.brandSlug === slug)?.brand || slug;
+      tags.push({ label, key: `brand:${slug}` });
+    }
+    for (const [model, on] of Object.entries(bf.models)) {
+      if (on) tags.push({ label: model, key: `model:${slug}:${model}` });
+    }
+  }
+
+  if (filters.yearFrom || filters.yearTo) {
+    const label = `${T('cat.tag.year')}: ${filters.yearFrom||'…'}–${filters.yearTo||'…'}`;
+    tags.push({ label, key: 'year' });
+  }
+  if (filters.priceFrom || filters.priceTo) {
+    const label = `${T('cat.tag.price')}: ${filters.priceFrom||'0'}–${filters.priceTo||'∞'} $`;
+    tags.push({ label, key: 'price' });
+  }
+  if (filters.kmFrom || filters.kmTo) {
+    const label = `${T('cat.tag.km')}: ${filters.kmFrom||'0'}–${filters.kmTo||'∞'} км`;
+    tags.push({ label, key: 'km' });
+  }
+  for (const [c, on] of Object.entries(filters.colors)) {
+    if (on) tags.push({ label: c, key: `color:${c}` });
+  }
+  for (const [c, on] of Object.entries(filters.interiorColors)) {
+    if (on) tags.push({ label: `${T('cat.tag.interior')}: ${c}`, key: `interiorColor:${c}` });
+  }
+  for (const [f, on] of Object.entries(filters.fuels)) {
+    if (on) tags.push({ label: f, key: `fuel:${f}` });
+  }
+
+  cont.innerHTML = tags.map(t =>
+    `<span class="a-tag" onclick="removeTag('${t.key}')">${t.label} ×</span>`
+  ).join('');
+
+  const hasFilters = tags.length > 0;
+  document.getElementById('resetAll').classList.toggle('hidden', !hasFilters);
+  document.getElementById('resetAllDrawer').classList.toggle('hidden', !hasFilters);
+
+  const mfc = document.getElementById('mobileFilterCount');
+  if (tags.length) { mfc.style.display='inline'; mfc.textContent=tags.length; }
+  else { mfc.style.display='none'; }
+}
+
+function removeTag(key) {
+  if (key.startsWith('brand:')) {
+    const slug = key.slice(6);
+    if (filters.brands[slug]) filters.brands[slug].on = false;
+  } else if (key.startsWith('model:')) {
+    const [, slug, model] = key.split(':');
+    if (filters.brands[slug]?.models) filters.brands[slug].models[model] = false;
+  } else if (key === 'year') {
+    filters.yearFrom = filters.yearTo = '';
+    document.querySelectorAll('.r-year').forEach(el => el.value = '');
+  } else if (key === 'price') {
+    filters.priceFrom = filters.priceTo = '';
+    document.querySelectorAll('.r-price').forEach(el => el.value = '');
+  } else if (key === 'km') {
+    filters.kmFrom = filters.kmTo = '';
+    document.querySelectorAll('.r-km').forEach(el => el.value = '');
+  } else if (key.startsWith('color:')) {
+    const c = key.slice(6);
+    filters.colors[c] = false;
+  } else if (key.startsWith('interiorColor:')) {
+    const c = key.slice(14);
+    filters.interiorColors[c] = false;
+  } else if (key.startsWith('fuel:')) {
+    const f = key.slice(5);
+    filters.fuels[f] = false;
+  }
+  rebuildSidebar();
+  applyAndRender();
+}
+
+function applyAndRender() {
+  renderTags();
+  renderCars();
+}
+
+/* ── BUILD SIDEBAR ── */
+function buildFilterHTML() {
+  // Build brand tree from data
+  const brandMap = {};
+  allCars.forEach(car => {
+    if (!brandMap[car.brandSlug]) brandMap[car.brandSlug] = { name: car.brand, models: {} };
+    brandMap[car.brandSlug].models[car.model] = (brandMap[car.brandSlug].models[car.model]||0)+1;
+  });
+
+  // Ensure filters.brands is initialized
+  for (const [slug, info] of Object.entries(brandMap)) {
+    if (!filters.brands[slug]) filters.brands[slug] = { on: false, models: {} };
+    for (const model of Object.keys(info.models)) {
+      if (filters.brands[slug].models[model] === undefined) filters.brands[slug].models[model] = false;
+    }
+  }
+
+  const brandHTML = Object.entries(brandMap).map(([slug, info]) => {
+    const bf = filters.brands[slug];
+    const totalCount = Object.values(info.models).reduce((a,b)=>a+b,0);
+    const modelsOpen = Object.values(bf.models).some(v=>v);
+    const modelsHTML = Object.entries(info.models).map(([model, cnt]) =>
+      `<div class="model-row" onclick="toggleModel('${slug}','${model}')">
+        <div class="m-check ${bf.models[model]?'on':''}"></div>
+        <span class="m-label">${model}</span>
+        <span class="m-count">${cnt}</span>
+      </div>`
+    ).join('');
+    return `<div class="brand-item ${modelsOpen?'expanded':''}" id="bi-${slug}">
+      <div class="brand-row">
+        <div class="b-check ${bf.on?'on':''}" onclick="toggleBrand('${slug}')"></div>
+        <span class="b-label" onclick="toggleBrand('${slug}')">${info.name}</span>
+        <span class="b-count">${totalCount}</span>
+        <span class="b-expand" onclick="toggleExpand('${slug}')">▶</span>
+      </div>
+      <div class="b-models">${modelsHTML}</div>
+    </div>`;
+  }).join('');
+
+  // Colors
+  const colorMap = {};
+  allCars.forEach(c => { colorMap[c.color] = (colorMap[c.color]||0)+1; });
+  if (Object.keys(filters.colors).length === 0) {
+    Object.keys(colorMap).forEach(c => filters.colors[c] = false);
+  }
+  const colorsHTML = Object.entries(colorMap).map(([color, cnt]) =>
+    `<div class="chk-row" onclick="toggleCheck('colors','${color}')">
+      <div class="chk-box ${filters.colors[color]?'on':''}"></div>
+      <span class="chk-label">${color}</span>
+      <span class="chk-count">${cnt}</span>
+    </div>`
+  ).join('');
+
+  // Interior colors
+  const interiorColorMap = {};
+  allCars.forEach(c => { if(c.interiorColor) interiorColorMap[c.interiorColor] = (interiorColorMap[c.interiorColor]||0)+1; });
+  if (Object.keys(filters.interiorColors).length === 0) {
+    Object.keys(interiorColorMap).forEach(c => filters.interiorColors[c] = false);
+  }
+  const interiorColorsHTML = Object.entries(interiorColorMap).map(([color, cnt]) =>
+    `<div class="chk-row" onclick="toggleCheck('interiorColors','${color}')">
+      <div class="chk-box ${filters.interiorColors[color]?'on':''}"></div>
+      <span class="chk-label">${color}</span>
+      <span class="chk-count">${cnt}</span>
+    </div>`
+  ).join('');
+
+  // Fuels
+  const fuelMap = {};
+  allCars.forEach(c => { if(c.fuel) fuelMap[c.fuel]=(fuelMap[c.fuel]||0)+1; });
+  const allFuels = ['Бензин','Дизель','Гибрид','Электро','Другое'];
+  if (Object.keys(filters.fuels).length === 0) {
+    allFuels.forEach(f => filters.fuels[f] = false);
+  }
+  const fuelsHTML = allFuels.map(fuel =>
+    `<div class="chk-row" onclick="toggleCheck('fuels','${fuel}')">
+      <div class="chk-box ${filters.fuels[fuel]?'on':''}"></div>
+      <span class="chk-label">${fuel}</span>
+      <span class="chk-count">${fuelMap[fuel]||0}</span>
+    </div>`
+  ).join('');
+
+  return `
+    <div class="f-section open" id="fs-brand">
+      <div class="f-head" onclick="toggleSection('fs-brand')">
+        <span class="f-name">${T('cat.filter.brand')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">${brandHTML}</div>
+    </div>
+
+    <div class="f-section open" id="fs-year">
+      <div class="f-head" onclick="toggleSection('fs-year')">
+        <span class="f-name">${T('cat.filter.year')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">
+        <div class="range-row">
+          <input type="number" class="r-input r-year" placeholder="От" value="${filters.yearFrom}"
+            oninput="filters.yearFrom=this.value;applyAndRender()">
+          <span class="r-sep">—</span>
+          <input type="number" class="r-input r-year" placeholder="До" value="${filters.yearTo}"
+            oninput="filters.yearTo=this.value;applyAndRender()">
+        </div>
+      </div>
+    </div>
+
+    <div class="f-section" id="fs-price">
+      <div class="f-head" onclick="toggleSection('fs-price')">
+        <span class="f-name">${T('cat.filter.price')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">
+        <div class="range-row">
+          <input type="number" class="r-input r-price" placeholder="От" value="${filters.priceFrom}"
+            oninput="filters.priceFrom=this.value;applyAndRender()">
+          <span class="r-sep">—</span>
+          <input type="number" class="r-input r-price" placeholder="До" value="${filters.priceTo}"
+            oninput="filters.priceTo=this.value;applyAndRender()">
+        </div>
+      </div>
+    </div>
+
+    <div class="f-section" id="fs-km">
+      <div class="f-head" onclick="toggleSection('fs-km')">
+        <span class="f-name">${T('cat.filter.km')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">
+        <div class="range-row">
+          <input type="number" class="r-input r-km" placeholder="От" value="${filters.kmFrom}"
+            oninput="filters.kmFrom=this.value;applyAndRender()">
+          <span class="r-sep">—</span>
+          <input type="number" class="r-input r-km" placeholder="До" value="${filters.kmTo}"
+            oninput="filters.kmTo=this.value;applyAndRender()">
+        </div>
+      </div>
+    </div>
+
+    <div class="f-section" id="fs-color">
+      <div class="f-head" onclick="toggleSection('fs-color')">
+        <span class="f-name">${T('cat.filter.color')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">
+        <div class="chk-list">${colorsHTML}</div>
+      </div>
+    </div>
+
+    <div class="f-section" id="fs-interior-color">
+      <div class="f-head" onclick="toggleSection('fs-interior-color')">
+        <span class="f-name">${T('cat.filter.interior')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">
+        <div class="chk-list">${interiorColorsHTML}</div>
+      </div>
+    </div>
+
+    <div class="f-section" id="fs-fuel">
+      <div class="f-head" onclick="toggleSection('fs-fuel')">
+        <span class="f-name">${T('cat.filter.fuel')}</span>
+        <span class="f-arrow">▼</span>
+      </div>
+      <div class="f-body">
+        <div class="chk-list">${fuelsHTML}</div>
+      </div>
+    </div>`;
+}
+
+function rebuildSidebar() {
+  const html = buildFilterHTML();
+  document.getElementById('sidebarContent').innerHTML = html;
+  document.getElementById('drawerContent').innerHTML = html;
+}
+
+/* ── TOGGLE HANDLERS ── */
+function toggleSection(id) {
+  // Toggle both desktop and drawer instances
+  document.querySelectorAll(`#${id}`).forEach(el => el.classList.toggle('open'));
+}
+
+function toggleBrand(slug) {
+  filters.brands[slug].on = !filters.brands[slug].on;
+  if (filters.brands[slug].on) {
+    Object.keys(filters.brands[slug].models).forEach(m => filters.brands[slug].models[m] = false);
+  }
+  rebuildSidebar();
+  applyAndRender();
+}
+
+function toggleExpand(slug) {
+  document.querySelectorAll(`#bi-${slug}`).forEach(el => el.classList.toggle('expanded'));
+}
+
+function toggleModel(slug, model) {
+  filters.brands[slug].on = false;
+  filters.brands[slug].models[model] = !filters.brands[slug].models[model];
+  rebuildSidebar();
+  applyAndRender();
+}
+
+function toggleCheck(group, key) {
+  filters[group][key] = !filters[group][key];
+  rebuildSidebar();
+  applyAndRender();
+}
+
+function resetAllFilters() {
+  for (const slug of Object.keys(filters.brands)) {
+    filters.brands[slug].on = false;
+    Object.keys(filters.brands[slug].models).forEach(m => filters.brands[slug].models[m] = false);
+  }
+  filters.yearFrom = filters.yearTo = '';
+  filters.priceFrom = filters.priceTo = '';
+  filters.kmFrom = filters.kmTo = '';
+  Object.keys(filters.colors).forEach(c => filters.colors[c] = false);
+  Object.keys(filters.interiorColors).forEach(c => filters.interiorColors[c] = false);
+  Object.keys(filters.fuels).forEach(f => filters.fuels[f] = false);
+  rebuildSidebar();
+  applyAndRender();
+}
+
+/* ── MOBILE DRAWER ── */
+function openDrawer() {
+  document.getElementById('sidebarOverlay').classList.add('open');
+  document.getElementById('sidebarDrawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.getElementById('sidebarDrawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── NAV / SCROLL ── */
+function toggleNav() { document.getElementById('navMobile').classList.toggle('open'); }
+window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('solid', scrollY > 40); });
+(function(){
+  const saved = localStorage.getItem('likonTheme');
+  if(saved === 'light') { document.body.classList.add('light'); }
+  function syncIcon() {
+    const isLight = document.body.classList.contains('light');
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+      btn.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+  }
+  syncIcon();
+  window.toggleTheme = function() {
+    document.body.classList.toggle('light');
+    localStorage.setItem('likonTheme', document.body.classList.contains('light') ? 'light' : 'dark');
+    syncIcon();
+  };
+})();
+
+/* ── INIT ── */
+async function init() {
+  try { allCars = await (await fetch('/cars.json')).json(); } catch(e) { allCars = []; }
+  rebuildSidebar();
+  applyAndRender();
+}
+init();
+</script>
+</body>
+</html>

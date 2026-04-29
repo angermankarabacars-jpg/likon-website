@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Likon Auto — Экспорт премиальных автомобилей</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* ── HERO ── */
+    .hero {
+      height: 100vh;
+      min-height: 640px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 220px;
+      background: linear-gradient(to bottom, transparent, rgba(4,4,4,0.9));
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 1320px; margin: 0 auto;
+      padding: 0 52px;
+    }
+    .hero-content { max-width: 660px; }
+    .hero-logo { margin-bottom: 48px; }
+    .hero-logo img { height: 52px; filter: brightness(0) invert(1); margin: 0 auto; }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
+    }
+    .hero-h1 {
+      font-family: var(--display);
+      font-size: clamp(46px, 8vw, 96px);
+      font-weight: 300; line-height: 1.0; letter-spacing: -0.01em;
+      margin-bottom: 26px;
+      text-shadow: 0 4px 32px rgba(0,0,0,0.7);
+    }
+    .hero-h1 em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-size: 16px; color: var(--w70); font-weight: 300; line-height: 1.8;
+      max-width: 480px; margin: 0 0 40px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.8);
+    }
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px; left: 50%; transform: translateX(-50%);
+      z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--w40); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 44px;
+      background: linear-gradient(to bottom, var(--w40), transparent);
+      animation: sp 2s ease-in-out infinite;
+    }
+    @keyframes sp { 0%,100%{opacity:1;transform:scaleY(1)} 50%{opacity:.25;transform:scaleY(.4)} }
+
+    /* ── BRANDS ── */
+    .brands-bar {
+      background: rgba(3,3,3,0.92);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow-x: clip;
+      overflow-y: visible;
+      padding: 16px 0;
+      cursor: grab;
+      user-select: none;
+      touch-action: pan-y;
+    }
+    .brands-bar.dragging { cursor: grabbing; }
+    .brands-inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+    }
+    .brand-item {
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px 52px; cursor: pointer;
+      position: relative; flex-shrink: 0;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+    .brand-item.active::after {
+      content: ''; position: absolute; bottom: 0;
+      left: 36px; right: 36px; height: 1px; background: var(--gold);
+    }
+    .brand-item img {
+      height: 72px; max-width: 200px; object-fit: contain;
+      pointer-events: none;
+    }
+
+    /* ── CATALOG ── */
+    .catalog-wrap {
+      background: rgba(3,3,3,0.93);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 52px;
+    }
+    .catalog-inner { max-width: 1320px; margin: 0 auto; }
+    .catalog-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 44px; flex-wrap: wrap; gap: 14px;
+    }
+    .catalog-btn {
+      background: none; border: 1px solid var(--border); color: var(--w40);
+      padding: 8px 18px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      font-family: var(--body); cursor: pointer; transition: all 0.2s; text-decoration: none;
+      display: inline-flex; align-items: center;
+    }
+    .catalog-btn:hover { border-color: var(--w40); color: var(--white); }
+    .pagination {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin-top: 44px;
+    }
+    .page-btn {
+      background: none; border: 1px solid var(--border); color: var(--w40);
+      width: 38px; height: 38px; font-size: 12px; font-family: var(--body);
+      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .page-btn:hover { border-color: var(--w40); color: var(--white); }
+    .page-btn.active { border-color: var(--gold); color: var(--white); background: var(--gold); }
+    .page-btn:disabled { opacity: 0.25; cursor: default; }
+    .cars-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 18px;
+    }
+    .car-card {
+      display: block;
+      background: rgba(12,12,12,0.9);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      color: var(--white);
+    }
+    .car-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      border-color: rgba(208,95,0,0.3);
+    }
+    .car-img { aspect-ratio: 16/10; overflow: hidden; }
+    .car-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+    .car-card:hover .car-img img { transform: scale(1.06); }
+    .car-body { padding: 22px 24px 26px; }
+    .car-brand { font-size: 9px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 7px; }
+    .car-model { font-family: var(--display); font-size: 26px; font-weight: 400; margin-bottom: 16px; }
+    .car-specs { display: flex; align-items: center; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+    .car-spec { font-size: 12px; color: var(--w70); }
+    .car-dot { width: 2px; height: 2px; background: var(--w15); border-radius: 50%; flex-shrink: 0; }
+    .car-price { font-size: 21px; font-weight: 600; margin-bottom: 20px; }
+    .car-price.req { font-size: 12px; font-weight: 400; color: var(--w40); letter-spacing: 0.08em; text-transform: uppercase; }
+    .car-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); border-bottom: 1px solid rgba(208,95,0,0.25); padding-bottom: 2px;
+      transition: gap 0.2s, border-color 0.2s;
+    }
+    .car-link:hover { gap: 13px; border-color: var(--gold); }
+    .no-cars {
+      grid-column: 1/-1; text-align: center; padding: 72px 32px;
+    }
+    .no-cars-title { font-family: var(--display); font-size: 30px; font-weight: 300; color: var(--w70); margin-bottom: 10px; }
+    .no-cars-sub { font-size: 13px; color: var(--w40); margin-bottom: 28px; }
+
+    /* ── PROCESS ── */
+    .process-wrap {
+      padding: 96px 52px;
+      background: transparent;
+      position: relative;
+    }
+    .process-inner { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .steps-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      margin-top: 56px;
+      min-height: 400px;
+    }
+    /* ── Left nav ── */
+    .steps-nav {
+      display: flex; flex-direction: column;
+      border-right: 1px solid var(--border);
+      padding-right: 0;
+      position: relative;
+    }
+    .step-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 24px 14px 0;
+      cursor: pointer; position: relative;
+    }
+    .step-item::before {
+      content: ''; position: absolute;
+      left: 17px; top: 0; bottom: 0; width: 1px;
+      background: var(--border); z-index: 0;
+    }
+    .step-item:first-child::before { top: 50%; }
+    .step-item:last-child::before  { bottom: 50%; }
+    .step-node {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--w40);
+      flex-shrink: 0; position: relative; z-index: 1;
+      background: rgba(5,5,5,0.95);
+      transition: border-color 0.3s, color 0.3s, background 0.3s;
+    }
+    .step-item.active .step-node  { border-color: var(--gold); background: var(--gold); color: #000; }
+    .step-item:hover:not(.active) .step-node { border-color: var(--w40); color: var(--w70); }
+    .step-nav-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--w40);
+      transition: color 0.25s; padding-top: 9px;
+    }
+    .step-item.active .step-nav-label  { color: var(--white); }
+    .step-item:hover:not(.active) .step-nav-label { color: var(--w70); }
+    .step-inline { display: none; }
+    /* ── Right content ── */
+    .steps-content {
+      position: relative; overflow: hidden; min-height: 400px;
+    }
+    .step-panel {
+      position: absolute; inset: 0;
+      padding: 0 0 0 60px;
+      display: flex; flex-direction: column; justify-content: center;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      pointer-events: none;
+    }
+    .step-panel.active {
+      opacity: 1; transform: none; pointer-events: auto;
+    }
+    .step-bg-num {
+      font-family: var(--display);
+      font-size: 220px; font-weight: 700; line-height: 1;
+      color: rgba(255,255,255,0.04);
+      position: absolute; right: -8px; bottom: -24px;
+      user-select: none; pointer-events: none;
+    }
+    .step-tag {
+      display: block;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .step-panel-title {
+      font-family: var(--display);
+      font-size: clamp(42px, 5vw, 68px);
+      font-weight: 300; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .step-divider { width: 36px; height: 1px; background: var(--gold); margin: 20px 0; }
+    .step-panel-desc {
+      font-size: 15px; color: var(--w70);
+      line-height: 1.85; max-width: 460px;
+    }
+    /* ── Mobile steps ── */
+    @media (max-width: 768px) {
+      .steps-layout { grid-template-columns: 1fr; min-height: auto; }
+      .steps-nav { border-right: none; width: 100%; }
+      .steps-content { display: none; }
+      .step-item { padding: 14px 0; align-items: flex-start; }
+      .step-item::before { left: 17px; }
+      .step-node { margin-top: 2px; flex-shrink: 0; }
+      .step-item.active .step-nav-label { display: none; }
+      .step-inline {
+        display: none; flex-direction: column;
+        flex: 1; padding-left: 16px;
+      }
+      .step-item.active .step-inline { display: flex; }
+      .step-inline .step-tag { margin-bottom: 8px; font-size: 9px; }
+      .step-inline .step-panel-title { font-size: 30px; }
+      .step-inline .step-divider { margin: 12px 0; }
+      .step-inline .step-panel-desc { font-size: 13px; line-height: 1.7; }
+    }
+
+    /* ── GALLERY ── */
+    .gallery-wrap {
+      padding: 96px 52px;
+      background: rgba(3,3,3,0.75);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .gallery-inner { max-width: 1320px; margin: 0 auto; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 240px 240px;
+      gap: 7px; margin-top: 44px;
+    }
+    .g-item { overflow: hidden; }
+    .g-item:first-child { grid-row: 1/3; }
+    .g-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+    .g-item:hover img { transform: scale(1.05); }
+
+    /* ── CTA ── */
+    .cta-wrap {
+      padding: 110px 52px;
+      text-align: center;
+      background: transparent;
+      position: relative;
+    }
+    .cta-inner { max-width: 680px; margin: 0 auto; position: relative; z-index: 1; }
+    .cta-title {
+      font-family: var(--display); font-size: clamp(40px, 6vw, 76px);
+      font-weight: 300; line-height: 1.1; margin-bottom: 18px;
+      text-shadow: 0 4px 32px rgba(0,0,0,0.8);
+    }
+    .cta-title em { font-style: italic; color: var(--gold); }
+    .cta-rule { width: 40px; height: 1px; background: var(--gold); margin: 20px auto 0; }
+    .cta-sub { font-size: 15px; color: var(--w70); font-weight: 300; line-height: 1.8; margin: 28px 0 40px; text-shadow: 0 2px 16px rgba(0,0,0,0.8); }
+    .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .catalog-wrap, .gallery-wrap { padding: 64px 22px; }
+      .process-wrap, .cta-wrap { padding: 72px 22px; }
+      .cars-grid { grid-template-columns: 1fr; gap: 14px; }
+      .process-steps { grid-template-columns: 1fr; gap: 36px; }
+      .process-steps::before { display: none; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px 160px; }
+      .g-item:first-child { grid-column: 1/3; grid-row: 1; }
+      .hero-h1 { font-size: 46px; }
+      .hero-inner { padding: 0 22px; }
+    }
+    @media (min-width:769px) and (max-width:1050px) {
+      .cars-grid { grid-template-columns: repeat(2,1fr); }
+      .process-steps { grid-template-columns: repeat(3,1fr); }
+      .catalog-wrap, .gallery-wrap { padding: 72px 28px; }
+      .process-wrap, .cta-wrap { padding: 80px 28px; }
+    }
+
+    /* ── LIGHT THEME OVERRIDES ── */
+    body.light .brands-bar { background: #fff; border-color: rgba(0,0,0,0.08); }
+    body.light .brand-item img { filter: invert(1); }
+    body.light .catalog-wrap { background: #fff; border-color: rgba(0,0,0,0.08); }
+    body.light .car-card { background: #fff; border-color: rgba(0,0,0,0.09); }
+    body.light .car-card:hover { box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+    body.light .gallery-wrap { background: #fff; border-color: rgba(0,0,0,0.08); }
+
+    body.light .hero-logo img { filter: brightness(0); }
+  </style>
+</head>
+<body>
+
+<!-- FIXED BG -->
+<div class="page-bg" style="background-image:url('/images/hero-bg.jpg')"></div>
+<div class="page-overlay" style="background:rgba(0,0,0,0.70)"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto">
+    </a>
+    <ul class="nav-links">
+      <li class="nav-toggle-desktop"><button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button></li>
+      <li class="nav-lang-desktop"><button class="lang-toggle" onclick="toggleLang()"><span class="lang-label">EN</span></button></li>
+      <li><a href="/catalog.html" class="active" data-i18n="nav.catalog">Каталог</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+      <li><a href="/contact.html" class="nav-btn" data-i18n="nav.contact">Связаться</a></li>
+    </ul>
+    <button class="lang-toggle nav-lang-mobile" onclick="toggleLang()"><span class="lang-label">EN</span></button>
+    <button class="theme-toggle nav-toggle-mobile" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button>
+    <button class="nav-ham" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="nav-mobile" id="navMobile">
+  <a href="/catalog.html" data-i18n="nav.catalog">Каталог</a>
+  <a href="/about.html" data-i18n="nav.about">О нас</a>
+  <a href="/contact.html" data-i18n="nav.contact">Связаться</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="hero-eyebrow" data-i18n="index.hero.eyebrow">Экспорт из Южной Кореи</p>
+      <h1 class="hero-h1" data-i18n-html="index.hero.title">Премиальные авто<br>по всему миру</h1>
+      <p class="hero-sub" data-i18n="index.hero.sub">Подбираем автомобили под заказ, проверяем состояние и полностью сопровождаем сделку — от покупки до доставки.</p>
+      <div class="hero-btns">
+        <a href="#catalog" class="btn-gold" data-i18n="index.hero.btn1">Смотреть каталог →</a>
+        <a href="/contact.html" class="btn-outline" data-i18n="index.hero.btn2">Связаться с нами</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-line"></div></div>
+</section>
+
+<!-- BRANDS MARQUEE -->
+<div class="brands-bar">
+  <div class="brands-inner">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+</div>
+
+<!-- CATALOG -->
+<div class="catalog-wrap" id="catalog">
+  <div class="catalog-inner">
+    <span class="section-label" data-i18n="index.cat.label">Наш каталог</span>
+    <div class="catalog-top">
+      <div>
+        <h2 class="section-title" id="catalogTitle" data-i18n="index.cat.title">Все автомобили</h2>
+        <div class="section-rule"></div>
+      </div>
+      <a href="/catalog.html" class="catalog-btn" data-i18n="index.cat.btn">Перейти в каталог →</a>
+    </div>
+    <div class="cars-grid" id="carsGrid"></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="process-wrap" id="process">
+  <div class="process-inner">
+    <span class="section-label" data-i18n="index.process.label">Как это работает</span>
+    <h2 class="section-title" data-i18n="index.process.title">Этапы покупки</h2>
+    <div class="section-rule"></div>
+    <div class="steps-layout">
+      <div class="steps-nav">
+        <div class="step-item active" onclick="setStep(0)">
+          <div class="step-node">01</div>
+          <span class="step-nav-label" data-i18n="step.1.nav">Подбор</span>
+          <div class="step-inline">
+            <span class="step-tag" data-i18n="step.1.tag">Шаг 01</span>
+            <h3 class="step-panel-title" data-i18n="step.1.title">Подбор</h3>
+            <div class="step-divider"></div>
+            <p class="step-panel-desc" data-i18n="step.1.desc">Выберите авто с сайта или отправьте параметры — подберём лучший вариант под бюджет и технические требования.</p>
+          </div>
+        </div>
+        <div class="step-item" onclick="setStep(1)">
+          <div class="step-node">02</div>
+          <span class="step-nav-label" data-i18n="step.2.nav">Проверка</span>
+          <div class="step-inline">
+            <span class="step-tag" data-i18n="step.2.tag">Шаг 02</span>
+            <h3 class="step-panel-title" data-i18n="step.2.title">Проверка</h3>
+            <div class="step-divider"></div>
+            <p class="step-panel-desc" data-i18n="step.2.desc">Подробные фото, видео и отчёты осмотра для полной прозрачности перед покупкой.</p>
+          </div>
+        </div>
+        <div class="step-item" onclick="setStep(2)">
+          <div class="step-node">03</div>
+          <span class="step-nav-label" data-i18n="step.3.nav">Бронь</span>
+          <div class="step-inline">
+            <span class="step-tag" data-i18n="step.3.tag">Шаг 03</span>
+            <h3 class="step-panel-title" data-i18n="step.3.title">Бронь</h3>
+            <div class="step-divider"></div>
+            <p class="step-panel-desc" data-i18n="step.3.desc">Фиксируем автомобиль за вами — вносите задаток, и машина снимается с продажи до завершения сделки.</p>
+          </div>
+        </div>
+        <div class="step-item" onclick="setStep(3)">
+          <div class="step-node">04</div>
+          <span class="step-nav-label" data-i18n="step.4.nav">Выкуп</span>
+          <div class="step-inline">
+            <span class="step-tag" data-i18n="step.4.tag">Шаг 04</span>
+            <h3 class="step-panel-title" data-i18n="step.4.title">Выкуп</h3>
+            <div class="step-divider"></div>
+            <p class="step-panel-desc" data-i18n="step.4.desc">После согласования всех условий выкупаем автомобиль и полностью сопровождаем сделку.</p>
+          </div>
+        </div>
+        <div class="step-item" onclick="setStep(4)">
+          <div class="step-node">05</div>
+          <span class="step-nav-label" data-i18n="step.5.nav">Отправка</span>
+          <div class="step-inline">
+            <span class="step-tag" data-i18n="step.5.tag">Шаг 05</span>
+            <h3 class="step-panel-title" data-i18n="step.5.title">Отправка</h3>
+            <div class="step-divider"></div>
+            <p class="step-panel-desc" data-i18n="step.5.desc">Организуем экспорт из Кореи в вашу страну, включая все необходимые таможенные процедуры.</p>
+          </div>
+        </div>
+        <div class="step-item" onclick="setStep(5)">
+          <div class="step-node">06</div>
+          <span class="step-nav-label" data-i18n="step.6.nav">Получение</span>
+          <div class="step-inline">
+            <span class="step-tag" data-i18n="step.6.tag">Шаг 06</span>
+            <h3 class="step-panel-title" data-i18n="step.6.title">Получение</h3>
+            <div class="step-divider"></div>
+            <p class="step-panel-desc" data-i18n="step.6.desc">Получаете автомобиль в порту назначения, готовый к регистрации и эксплуатации.</p>
+          </div>
+        </div>
+      </div>
+      <div class="steps-content">
+        <div class="step-panel active">
+          <div class="step-bg-num">01</div>
+          <span class="step-tag" data-i18n="step.1.tag">Шаг 01</span>
+          <h3 class="step-panel-title" data-i18n="step.1.title">Подбор</h3>
+          <div class="step-divider"></div>
+          <p class="step-panel-desc" data-i18n="step.1.desc">Выберите авто с сайта или отправьте параметры — подберём лучший вариант под бюджет и технические требования.</p>
+        </div>
+        <div class="step-panel">
+          <div class="step-bg-num">02</div>
+          <span class="step-tag" data-i18n="step.2.tag">Шаг 02</span>
+          <h3 class="step-panel-title" data-i18n="step.2.title">Проверка</h3>
+          <div class="step-divider"></div>
+          <p class="step-panel-desc" data-i18n="step.2.desc">Подробные фото, видео и отчёты осмотра для полной прозрачности перед покупкой.</p>
+        </div>
+        <div class="step-panel">
+          <div class="step-bg-num">03</div>
+          <span class="step-tag" data-i18n="step.3.tag">Шаг 03</span>
+          <h3 class="step-panel-title" data-i18n="step.3.title">Бронь</h3>
+          <div class="step-divider"></div>
+          <p class="step-panel-desc" data-i18n="step.3.desc">Фиксируем автомобиль за вами — вносите задаток, и машина снимается с продажи до завершения сделки.</p>
+        </div>
+        <div class="step-panel">
+          <div class="step-bg-num">04</div>
+          <span class="step-tag" data-i18n="step.4.tag">Шаг 04</span>
+          <h3 class="step-panel-title" data-i18n="step.4.title">Выкуп</h3>
+          <div class="step-divider"></div>
+          <p class="step-panel-desc" data-i18n="step.4.desc">После согласования всех условий выкупаем автомобиль и полностью сопровождаем сделку.</p>
+        </div>
+        <div class="step-panel">
+          <div class="step-bg-num">05</div>
+          <span class="step-tag" data-i18n="step.5.tag">Шаг 05</span>
+          <h3 class="step-panel-title" data-i18n="step.5.title">Отправка</h3>
+          <div class="step-divider"></div>
+          <p class="step-panel-desc" data-i18n="step.5.desc">Организуем экспорт из Кореи в вашу страну, включая все необходимые таможенные процедуры.</p>
+        </div>
+        <div class="step-panel">
+          <div class="step-bg-num">06</div>
+          <span class="step-tag" data-i18n="step.6.tag">Шаг 06</span>
+          <h3 class="step-panel-title" data-i18n="step.6.title">Получение</h3>
+          <div class="step-divider"></div>
+          <p class="step-panel-desc" data-i18n="step.6.desc">Получаете автомобиль в порту назначения, готовый к регистрации и эксплуатации.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-wrap">
+  <div class="gallery-inner">
+    <span class="section-label" data-i18n="index.gallery.label">Уже у клиентов</span>
+    <h2 class="section-title" data-i18n="index.gallery.title">Наши клиенты уже получили</h2>
+    <div class="section-rule"></div>
+    <div class="gallery-grid">
+      <div class="g-item"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/pexels-anewevisual-6968984.jpg?v=1776276189&width=1200" alt="Доставка" loading="lazy"></div>
+      <div class="g-item"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494546961.jpg?v=1776495052&width=800" alt="Range Rover" loading="lazy"></div>
+      <div class="g-item"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494423526.jpg?v=1776495200&width=800" alt="S-Class" loading="lazy"></div>
+      <div class="g-item"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/pexels-i-slam-abruev-2157269750-34941540.jpg?v=1776273263&width=800" alt="Автомобиль" loading="lazy"></div>
+      <div class="g-item"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494602839.jpg?v=1776495182&width=800" alt="G63 AMG" loading="lazy"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-inner">
+    <span class="section-label" data-i18n="index.cta.label">Начать</span>
+    <h2 class="cta-title" data-i18n-html="index.cta.title">Найдём автомобиль<br>именно для вас</h2>
+    <div class="cta-rule"></div>
+    <p class="cta-sub" data-i18n="index.cta.sub">Оставьте заявку — менеджер свяжется в течение часа и предложит варианты под ваш бюджет.</p>
+    <div class="cta-btns">
+      <a href="https://wa.me/821090905971" class="btn-gold" target="_blank" data-i18n="index.cta.btn1">Написать в WhatsApp →</a>
+      <a href="/about.html" class="btn-outline" data-i18n="index.cta.btn2">О нас</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto"></div>
+        <p class="footer-desc" data-i18n="footer.desc">Экспорт премиальных и люксовых автомобилей из Южной Кореи по всему миру.</p>
+        <div class="footer-social-icons">
+          <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-col-title" data-i18n="footer.nav">Навигация</p>
+        <ul class="footer-nav">
+          <li><a href="/catalog.html" data-i18n="nav.catalog">Каталог</a></li>
+          <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+          <li><a href="/contact.html" data-i18n="nav.contact">Связаться</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title" data-i18n="footer.contacts">Контакты</p>
+        <p class="footer-contact">
+          <span data-i18n="footer.location">Южная Корея</span><br>
+          <a href="https://wa.me/821090905971" target="_blank">+82 10-9090-5971</a><br>
+          <span style="color:rgba(255,255,255,0.2)">Telegram</span>
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy" data-i18n="footer.copy">© 2025 Likon Auto. Все права защищены.</p>
+      <div class="footer-socials">
+        <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/lang.js"></script>
+<script>
+const BRANDS = [
+  { name:'Rolls Royce',  slug:'rolls-royce',  logo:'/images/home-brand-carousel/rollse-royse.png' },
+  { name:'Porsche',      slug:'porsche',      logo:'/images/home-brand-carousel/porsche.png' },
+  { name:'Lamborghini',  slug:'lamborghini',  logo:'/images/home-brand-carousel/lamborgini.png' },
+  { name:'Audi',         slug:'audi',         logo:'/images/home-brand-carousel/audi.png' },
+  { name:'Bentley',      slug:'bentley',      logo:'/images/home-brand-carousel/bentley.png' },
+  { name:'Mercedes',     slug:'mercedes',     logo:'/images/home-brand-carousel/3.png' },
+  { name:'BMW',          slug:'bmw',          logo:'/images/home-brand-carousel/bmw.png' },
+  { name:'Ferrari',      slug:'ferrari',      logo:'/images/home-brand-carousel/ferarri.png' },
+  { name:'Land Rover',   slug:'land-rover',   logo:'/images/home-brand-carousel/land-rover.png' },
+  { name:'Lexus',        slug:'lexus',        logo:'/images/home-brand-carousel/lexus.png' },
+];
+
+let allCars = [], activeBrand = null, currentPage = 1;
+const CARS_PER_PAGE = 3;
+
+function buildMarquee() {
+  const t = document.getElementById('marqueeTrack');
+  // 6 copies — enough for any screen width, seamless loop
+  t.innerHTML = [...BRANDS,...BRANDS,...BRANDS,...BRANDS,...BRANDS,...BRANDS].map(b=>`
+    <div class="brand-item" data-slug="${b.slug}" onclick="selectBrand('${b.slug}','${b.name}')">
+      <img src="${b.logo}" alt="${b.name}" loading="lazy">
+    </div>`).join('');
+}
+
+function selectBrand(slug, name) {
+  if (activeBrand === slug) { resetFilter(); return; }
+  activeBrand = slug;
+  currentPage = 1;
+  document.querySelectorAll('.brand-item').forEach(el=>el.classList.toggle('active', el.dataset.slug===slug));
+  document.getElementById('catalogTitle').textContent = name;
+  renderCars();
+  document.getElementById('catalog').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function resetFilter() {
+  activeBrand = null;
+  currentPage = 1;
+  document.querySelectorAll('.brand-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('catalogTitle').textContent = T('index.cat.title');
+  renderCars();
+}
+
+function goToPage(page) {
+  currentPage = page;
+  renderCars();
+  document.getElementById('catalog').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderCars() {
+  const grid = document.getElementById('carsGrid');
+  const pag  = document.getElementById('pagination');
+  const list = activeBrand ? allCars.filter(c=>c.brandSlug===activeBrand) : allCars;
+
+  if (!activeBrand) {
+    document.getElementById('catalogTitle').textContent = T('index.cat.title');
+  } else {
+    const brandName = allCars.find(c => c.brandSlug === activeBrand)?.brand;
+    if (brandName) document.getElementById('catalogTitle').textContent = brandName;
+  }
+
+  if (!list.length) {
+    grid.innerHTML=`<div class="no-cars"><div class="no-cars-title">${T('index.nocars.brand')}</div><p class="no-cars-sub">${T('index.nocars.sub')}</p><a href="/contact.html" class="btn-gold" target="_blank">${T('index.nocars.btn')}</a></div>`;
+    pag.innerHTML = '';
+    return;
+  }
+
+  const totalPages = Math.ceil(list.length / CARS_PER_PAGE);
+  if (currentPage > totalPages) currentPage = totalPages;
+  const page = list.slice((currentPage-1)*CARS_PER_PAGE, currentPage*CARS_PER_PAGE);
+
+  grid.innerHTML = page.map(car=>{
+    const isReq = !car.price;
+    const price = isReq ? T('car.request') : '$'+car.price.toLocaleString('en-US');
+    return `<a href="/car.html?id=${car.id}" class="car-card">
+      <div class="car-img"><img src="${car.image}" alt="${car.brand} ${car.model}" loading="lazy"></div>
+      <div class="car-body">
+        <div class="car-brand">${car.brand}</div>
+        <div class="car-model">${car.model}</div>
+        <div class="car-specs">
+          <span class="car-spec">${car.year}</span>
+          <div class="car-dot"></div>
+          <span class="car-spec">${car.color}</span>
+          <div class="car-dot"></div>
+          <span class="car-spec">${car.mileage.toLocaleString('ru-RU')} км</span>
+        </div>
+        <div class="car-price ${isReq?'req':''}">${price}</div>
+        <span class="car-link">${isReq?T('car.inquire'):T('car.detail')} →</span>
+      </div>
+    </a>`;
+  }).join('');
+
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+
+  let html = `<button class="page-btn" onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+  for (let i=1; i<=totalPages; i++) {
+    html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goToPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn" onclick="goToPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  pag.innerHTML = html;
+}
+
+// ── Marquee: JS-driven scroll + drag + center zoom ──
+let mqX = 0, mqHalfW = 0, mqAuto = true, mqDrag = false, mqDragStartX = 0, mqDragStartMqX = 0;
+
+function mqLoop() {
+  const track = document.getElementById('marqueeTrack');
+  const wrap = track ? track.parentElement : null;
+
+  if (track && mqHalfW === 0 && track.scrollWidth > 0) {
+    mqHalfW = track.scrollWidth / 6;
+    mqX = 0;
+  }
+
+  if (track && mqHalfW > 0) {
+    if (mqAuto && !mqDrag) mqX -= 0.7;
+    if (mqX <= -mqHalfW) mqX += mqHalfW;
+    if (mqX > 0) mqX -= mqHalfW;
+    track.style.transform = `translateX(${mqX}px)`;
+  }
+
+  // Center zoom
+  const items = document.querySelectorAll('.brand-item');
+  if (items.length) {
+    const cx = window.innerWidth / 2;
+    items.forEach(item => {
+      const r = item.getBoundingClientRect();
+      const ratio = Math.max(0, 1 - Math.abs(cx - (r.left + r.width / 2)) / 320);
+      item.style.transform = `scale(${1 + 0.3 * ratio})`;
+      item.style.opacity = 0.65 + 0.35 * ratio;
+    });
+  }
+  requestAnimationFrame(mqLoop);
+}
+
+function mqInitEvents() {
+  const wrap = document.querySelector('.brands-bar');
+  if (!wrap) return;
+
+  const start = (x) => { mqDrag = true; mqAuto = false; mqDragStartX = x; mqDragStartMqX = mqX; wrap.classList.add('dragging'); document.body.style.userSelect = 'none'; };
+  const move  = (x) => { if (!mqDrag) return; mqX = mqDragStartMqX + (x - mqDragStartX); };
+  const end   = ()  => { if (!mqDrag) return; mqDrag = false; wrap.classList.remove('dragging'); document.body.style.userSelect = ''; setTimeout(() => { mqAuto = true; }, 600); };
+
+  wrap.addEventListener('mousedown',  e => { e.preventDefault(); start(e.clientX); });
+  window.addEventListener('mousemove', e => move(e.clientX));
+  window.addEventListener('mouseup',   end);
+  wrap.addEventListener('touchstart',  e => start(e.touches[0].clientX), { passive: true });
+  wrap.addEventListener('touchmove',   e => { e.preventDefault(); move(e.touches[0].clientX); }, { passive: false });
+  wrap.addEventListener('touchend',    end);
+}
+
+mqLoop();
+mqInitEvents();
+
+function setStep(n) {
+  document.querySelectorAll('.step-item').forEach((el,i) => el.classList.toggle('active', i===n));
+  document.querySelectorAll('.step-panel').forEach((el,i) => el.classList.toggle('active', i===n));
+}
+
+function toggleNav() { document.getElementById('navMobile').classList.toggle('open'); }
+
+(function(){
+  const saved = localStorage.getItem('likonTheme');
+  if(saved === 'light') { document.body.classList.add('light'); }
+  function syncIcon() {
+    const isLight = document.body.classList.contains('light');
+    document.querySelectorAll('.theme-toggle').forEach(btn => {
+      btn.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    });
+  }
+  syncIcon();
+  window.toggleTheme = function() {
+    document.body.classList.toggle('light');
+    localStorage.setItem('likonTheme', document.body.classList.contains('light') ? 'light' : 'dark');
+    syncIcon();
+  };
+})();
+
+window.addEventListener('scroll', ()=>{
+  document.getElementById('nav').classList.toggle('solid', scrollY>40);
+});
+
+async function init() {
+  buildMarquee();
+  try { allCars = await (await fetch('/cars.json')).json(); } catch(e){ allCars=[]; }
+  renderCars();
+}
+init();
+</script>
+</body>
+</html>
