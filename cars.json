@@ -10,8 +10,21 @@
     "mileage": 14,
     "price": 0,
     "fuel": "Gasolin",
-    "image": "",
-    "images": [],
+    "image": "https://res.cloudinary.com/droc3pvi3/image/upload/v1777631318/1777629979200_ln3eyr.jpg",
+    "images": [
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777631318/1777629979200_ln3eyr.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777631317/1777629979354_pqiudu.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777631316/1777629979474_seubl1.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777631315/1777629979553_edilz2.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777631316/1777629979626_zbjix4.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626433/cld-sample.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626434/cld-sample-2.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626434/cld-sample-3.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626434/cld-sample-4.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626435/cld-sample-5.jpg",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626435/main-sample.png",
+      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777626407/sample.jpg"
+    ],
     "description": "Mercedes-Benz E300 AMG Line — это бизнес-седан премиум-класса с 2.0-литровым турбодвигателем и спортивным AMG-обвесом. Сочетает комфорт, динамику и современные технологии, включая цифровую панель и системы помощи водителю.",
     "description_en": "Mercedes-Benz E300 AMG Line is a premium midsize sedan that combines a 2.0L turbo engine with sporty AMG styling. It offers a balance of comfort, performance, and advanced technology, with features like a refined interior, digital displays, and driver assistance systems.",
     "specs": {
