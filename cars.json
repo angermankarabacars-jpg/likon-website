@@ -1,77 +1,24 @@
 [
   {
-    "id": "mercedes-s-class-2023",
-    "brand": "Mercedes",
-    "brandSlug": "mercedes",
-    "model": "S-Class",
-    "year": 2023,
-    "color": "Чёрный",
-    "interiorColor": "Бежевый",
-    "mileage": 87124,
+    "id": "benz-e300-amg-line-2026",
+    "brand": "Benz",
+    "brandSlug": "benz",
+    "model": "E300 AMG LINE",
+    "year": 2026,
+    "color": "Black",
+    "interiorColor": "White",
+    "mileage": 14,
     "price": 0,
-    "fuel": "Бензин",
-    "image": "https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494423526.jpg?v=1776495200",
-    "description": "Mercedes-Benz S-Class — эталон роскошного автомобилестроения. Флагманский седан с безупречным исполнением салона, передовыми технологиями и исключительным уровнем комфорта. Идеален для тех, кто ценит статус и безупречное качество.",
-    "specs": { "Кузов": "Седан", "Привод": "Полный (4MATIC)", "КПП": "Автомат 9G-Tronic" }
-  },
-  {
-    "id": "range-rover-2025-1",
-    "brand": "Range Rover",
-    "brandSlug": "range-rover",
-    "model": "Range Rover",
-    "year": 2025,
-    "color": "Чёрный",
-    "interiorColor": "Чёрный",
-    "mileage": 2345,
-    "price": 0,
-    "fuel": "Гибрид",
-    "image": "https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494546961.jpg?v=1776495052",
-    "description": "Range Rover 2025 — воплощение британской роскоши и внедорожной мощи. Практически новый автомобиль с минимальным пробегом. Ультрасовременный интерьер, пневматическая подвеска и непревзойдённые возможности на любых дорогах.",
-    "specs": { "Кузов": "Внедорожник", "Привод": "Полный", "КПП": "Автомат" }
-  },
-  {
-    "id": "range-rover-2025-2",
-    "brand": "Range Rover",
-    "brandSlug": "range-rover",
-    "model": "Range Rover",
-    "year": 2025,
-    "color": "Чёрный",
-    "interiorColor": "Коричневый",
-    "mileage": 7235,
-    "price": 0,
-    "fuel": "Гибрид",
-    "image": "https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494620480.jpg?v=1776495161",
-    "description": "Range Rover 2025 в насыщенной комплектации. Один из самых желанных автомобилей современности — сочетает в себе роскошь премиального седана и возможности настоящего внедорожника. Отличное состояние, полная сервисная история.",
-    "specs": { "Кузов": "Внедорожник", "Привод": "Полный", "КПП": "Автомат" }
-  },
-  {
-    "id": "mercedes-g63-2024",
-    "brand": "Mercedes",
-    "brandSlug": "mercedes",
-    "model": "G63 AMG",
-    "year": 2024,
-    "color": "Чёрный",
-    "interiorColor": "Чёрный",
-    "mileage": 1345,
-    "price": 0,
-    "fuel": "Бензин",
-    "image": "https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494602839.jpg?v=1776495182",
-    "description": "Mercedes-AMG G63 — легендарный «Гелендваген» в исполнении AMG. 585 л.с., разгон 0–100 за 4.5 секунды и при этом — настоящий внедорожник. Практически новый экземпляр с пробегом всего 1345 км.",
-    "specs": { "Двигатель": "4.0 V8 Biturbo, 585 л.с.", "Привод": "Полный (4MATIC)", "КПП": "Автомат 9G-Tronic" }
-  },
-  {
-    "id": "ferrari-2024",
-    "brand": "Ferrari",
-    "brandSlug": "ferrari",
-    "model": "Ferrari",
-    "year": 2024,
-    "color": "Синий",
-    "interiorColor": "Красный",
-    "mileage": 3045,
-    "price": 100000,
-    "fuel": "Бензин",
-    "image": "https://id3v1j-bi.myshopify.com/cdn/shop/files/1776494503987.jpg?v=1776495052",
-    "description": "Ferrari в редком синем цвете — произведение итальянского автомобильного искусства. Захватывающая динамика, пронзительный звук и неповторимая харизма.",
-    "specs": { "Кузов": "Купе", "Цвет": "Синий металлик", "КПП": "Роботизированная" }
+    "fuel": "Gasolin",
+    "image": "12345 Benz E300 2026",
+    "images": [
+      "12345 Benz E300 2026"
+    ],
+    "description": "Mercedes-Benz E300 AMG Line — это бизнес-седан премиум-класса с 2.0-литровым турбодвигателем и спортивным AMG-обвесом. Сочетает комфорт, динамику и современные технологии, включая цифровую панель и системы помощи водителю.",
+    "description_en": "Mercedes-Benz E300 AMG Line is a premium midsize sedan that combines a 2.0L turbo engine with sporty AMG styling. It offers a balance of comfort, performance, and advanced technology, with features like a refined interior, digital displays, and driver assistance systems.",
+    "specs": {
+      "Привод": "4MATIC",
+      "Двигатель": "2.0"
+    }
   }
 ]
