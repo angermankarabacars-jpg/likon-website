@@ -10,10 +10,8 @@
     "mileage": 14,
     "price": 0,
     "fuel": "Gasolin",
-    "image": "12345 Benz E300 2026",
-    "images": [
-      "12345 Benz E300 2026"
-    ],
+    "image": "",
+    "images": [],
     "description": "Mercedes-Benz E300 AMG Line — это бизнес-седан премиум-класса с 2.0-литровым турбодвигателем и спортивным AMG-обвесом. Сочетает комфорт, динамику и современные технологии, включая цифровую панель и системы помощи водителю.",
     "description_en": "Mercedes-Benz E300 AMG Line is a premium midsize sedan that combines a 2.0L turbo engine with sporty AMG styling. It offers a balance of comfort, performance, and advanced technology, with features like a refined interior, digital displays, and driver assistance systems.",
     "specs": {
