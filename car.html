@@ -10,115 +10,190 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="/style.css">
   <style>
-    /* ── CAR HERO ── */
-    .car-hero {
-      height: 75vh; min-height: 520px;
-      position: relative;
-      overflow: hidden;
-      display: flex; align-items: flex-end;
-    }
-    .car-hero-img {
-      position: absolute; inset: 0;
-      background-size: cover; background-position: center;
-      transition: transform 8s ease;
-    }
-    .car-hero:hover .car-hero-img { transform: scale(1.04); }
-    .car-hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.75) 100%);
-    }
-    .car-hero-content {
-      position: relative; z-index: 1;
-      width: 100%; max-width: 1320px; margin: 0 auto;
-      padding: 0 52px 52px;
-    }
-    .car-hero-back {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
-      color: var(--w40); margin-bottom: 28px;
-      transition: color 0.2s;
-    }
-    .car-hero-back:hover { color: var(--white); }
-    .car-hero-brand {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 12px;
-    }
-    .car-hero-title {
-      font-family: var(--display); font-size: clamp(42px, 6vw, 80px);
-      font-weight: 300; line-height: 1.0;
-      text-shadow: 0 4px 32px rgba(0,0,0,0.5);
-    }
-
-    /* ── MAIN CONTENT ── */
-    .car-main {
+    /* ── PAGE LAYOUT ── */
+    .car-page {
       background: rgba(3,3,3,0.97);
       border-top: 1px solid var(--border);
-    }
-    .car-inner {
-      max-width: 1320px; margin: 0 auto;
-      padding: 72px 52px;
-      display: grid; grid-template-columns: 1fr 1.1fr; gap: 80px;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      align-items: start;
+      min-height: calc(100vh - 72px);
     }
 
-    /* LEFT: specs */
-    .car-specs-col {}
-    .spec-block { margin-bottom: 40px; }
+    /* ── GALLERY (LEFT) ── */
+    .car-gallery {
+      padding: 48px 24px 48px 52px;
+      position: sticky;
+      top: 72px;
+    }
+
+    .gallery-main {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #000;
+      cursor: zoom-in;
+    }
+    .gallery-main img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: opacity 0.25s ease;
+    }
+    .gallery-main img.fade { opacity: 0; }
+
+    .gallery-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.12);
+      color: #fff; font-size: 15px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+      z-index: 2;
+    }
+    .gallery-arrow:hover { background: var(--gold); border-color: var(--gold); }
+    .gallery-prev { left: 14px; }
+    .gallery-next { right: 14px; }
+
+    .gallery-counter {
+      position: absolute; bottom: 12px; right: 14px;
+      font-size: 10px; letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.55);
+      background: rgba(0,0,0,0.5);
+      padding: 3px 9px;
+      z-index: 2;
+    }
+
+    .gallery-thumbs {
+      display: flex; gap: 8px;
+      margin-top: 10px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .gallery-thumbs::-webkit-scrollbar { display: none; }
+
+    .gallery-thumb {
+      width: 90px; height: 62px; flex-shrink: 0;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: 0.45;
+      border: 1px solid transparent;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .gallery-thumb:hover { opacity: 0.75; }
+    .gallery-thumb.active { opacity: 1; border-color: var(--gold); }
+
+    /* ── INFO (RIGHT) ── */
+    .car-info {
+      padding: 48px 52px 64px 32px;
+      border-left: 1px solid var(--border);
+    }
+
+    .car-info-back {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--w40); margin-bottom: 32px;
+      transition: color 0.2s;
+    }
+    .car-info-back:hover { color: var(--white); }
+
+    .car-info-brand {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+    }
+    .car-info-title {
+      font-family: var(--display); font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 300; line-height: 1.05; margin-bottom: 32px;
+    }
+
     .spec-block-title {
       font-size: 9px; font-weight: 700; letter-spacing: 0.28em;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 18px;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
     }
     .spec-row {
       display: flex; justify-content: space-between; align-items: baseline;
-      padding: 14px 0; border-bottom: 1px solid var(--border);
+      padding: 13px 0; border-bottom: 1px solid var(--border);
     }
     .spec-row:first-of-type { border-top: 1px solid var(--border); }
     .spec-key { font-size: 12px; color: var(--w40); letter-spacing: 0.05em; }
-    .spec-val { font-size: 14px; color: var(--white); font-weight: 500; text-align: right; }
+    .spec-val { font-size: 13px; color: var(--white); font-weight: 500; text-align: right; }
 
-    .price-block { margin-top: 44px; padding: 32px; border: 1px solid var(--border); background: rgba(255,255,255,0.03); }
-    .price-label { font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--w40); margin-bottom: 10px; }
-    .price-value { font-family: var(--display); font-size: 44px; font-weight: 300; line-height: 1; }
-    .price-value.req { font-family: var(--body); font-size: 14px; font-weight: 400; color: var(--w70); letter-spacing: 0.05em; margin-top: 6px; }
-    .price-note { font-size: 12px; color: var(--w40); margin-top: 10px; line-height: 1.7; }
-
-    /* RIGHT: description + CTA */
-    .car-desc-col {}
-    .car-desc-label { font-size: 9px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-    .car-desc-title {
-      font-family: var(--display); font-size: clamp(28px, 3vw, 42px);
-      font-weight: 300; line-height: 1.15; margin-bottom: 20px;
+    .price-block {
+      margin: 32px 0;
+      padding: 28px 28px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
     }
-    .car-desc-rule { width: 36px; height: 1px; background: var(--gold); margin-bottom: 28px; }
-    .car-desc-text { font-size: 15px; color: var(--w70); line-height: 1.95; font-weight: 300; margin-bottom: 44px; }
+    .price-label { font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--w40); margin-bottom: 8px; }
+    .price-value { font-family: var(--display); font-size: 40px; font-weight: 300; line-height: 1; }
+    .price-value.req { font-family: var(--body); font-size: 14px; font-weight: 400; color: var(--w70); letter-spacing: 0.03em; margin-top: 4px; }
+    .price-note { font-size: 11px; color: var(--w40); margin-top: 8px; line-height: 1.7; }
 
-    .car-cta-title { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--w40); margin-bottom: 16px; }
-    .car-cta-btns { display: flex; flex-direction: column; gap: 12px; }
+    .car-desc-sep { width: 36px; height: 1px; background: var(--gold); margin: 32px 0 20px; }
+    .car-desc-text { font-size: 14px; color: var(--w70); line-height: 1.95; font-weight: 300; margin-bottom: 36px; }
+
+    .car-cta-title { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--w40); margin-bottom: 14px; }
+    .car-cta-btns { display: flex; flex-direction: column; gap: 10px; }
     .btn-wa {
       display: inline-flex; align-items: center; gap: 10px;
       background: #25D366; color: #fff;
-      padding: 15px 32px;
+      padding: 15px 28px;
       font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
       border: none; cursor: pointer;
       transition: background 0.2s, transform 0.2s;
     }
     .btn-wa:hover { background: #1fba5a; transform: translateY(-2px); color: #fff; }
 
+    /* ── FULLSCREEN OVERLAY ── */
+    .gallery-fs {
+      display: none;
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.96);
+      align-items: center; justify-content: center;
+    }
+    .gallery-fs.open { display: flex; }
+    .gallery-fs img {
+      max-width: 92vw; max-height: 92vh;
+      object-fit: contain;
+    }
+    .fs-close {
+      position: fixed; top: 20px; right: 24px;
+      background: none; border: none; color: rgba(255,255,255,0.6);
+      font-size: 28px; cursor: pointer; line-height: 1;
+      transition: color 0.2s;
+    }
+    .fs-close:hover { color: #fff; }
+    .fs-arrow {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      width: 50px; height: 50px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+      color: #fff; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .fs-arrow:hover { background: var(--gold); border-color: var(--gold); }
+    .fs-prev { left: 16px; }
+    .fs-next { right: 16px; }
+
     /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .car-hero-content { padding: 0 22px 40px; }
-      .car-inner { grid-template-columns: 1fr; gap: 48px; padding: 48px 22px; }
-      .price-block { padding: 24px; }
+    @media (max-width: 900px) {
+      .car-page { grid-template-columns: 1fr; }
+      .car-gallery { padding: 0; position: static; }
+      .gallery-main { aspect-ratio: 4/3; }
+      .gallery-thumbs { padding: 0 16px; margin-top: 8px; }
+      .car-info { padding: 32px 22px 56px; border-left: none; border-top: 1px solid var(--border); }
+      .car-info-back { margin-bottom: 24px; }
     }
-    @media (min-width: 769px) and (max-width: 1050px) {
-      .car-hero-content { padding: 0 28px 44px; }
-      .car-inner { padding: 56px 28px; gap: 48px; }
+    @media (min-width: 901px) and (max-width: 1100px) {
+      .car-gallery { padding: 36px 16px 36px 28px; }
+      .car-info { padding: 36px 28px 48px 20px; }
     }
 
-    /* ── LIGHT THEME OVERRIDES ── */
-    body.light .car-main { background: #fff; border-color: rgba(0,0,0,0.08); }
+    /* ── LIGHT THEME ── */
+    body.light .car-page { background: #fff; }
+    body.light .car-info { border-color: rgba(0,0,0,0.08); }
     body.light .price-block { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.09); }
+    body.light .spec-row { border-color: rgba(0,0,0,0.08); }
 
-    /* not-found state */
     .car-notfound {
       min-height: 60vh; display: flex; flex-direction: column;
       align-items: center; justify-content: center; text-align: center; padding: 48px 24px;
@@ -130,7 +205,6 @@
 </head>
 <body>
 
-<!-- FIXED BG -->
 <div class="page-bg" style="background-image:url('/images/hero-bg.jpg')"></div>
 <div class="page-overlay"></div>
 
@@ -156,8 +230,16 @@
   <a href="/contact.html">Связаться</a>
 </div>
 
-<!-- CONTENT injected by JS -->
+<!-- CONTENT -->
 <div id="carPage"></div>
+
+<!-- FULLSCREEN OVERLAY -->
+<div class="gallery-fs" id="galleryFs">
+  <button class="fs-close" onclick="closeFs()">×</button>
+  <button class="fs-arrow fs-prev" onclick="fsNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+  <img id="fsImg" src="" alt="">
+  <button class="fs-arrow fs-next" onclick="fsNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -167,11 +249,11 @@
         <div class="footer-logo"><img src="https://id3v1j-bi.myshopify.com/cdn/shop/files/5_29cf280f-9111-4648-b0de-3da6521fd892.png?v=1776812304&width=600" alt="Likon Auto"></div>
         <p class="footer-desc">Экспорт премиальных и люксовых автомобилей из Южной Кореи по всему миру.</p>
         <div class="footer-social-icons">
-          <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-          <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-          <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-          <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="https://wa.me/821090905971" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+          <a href="https://www.instagram.com/likon_auto" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.tiktok.com/@likon_auto" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="https://www.linkedin.com/company/likon-auto/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
         </div>
       </div>
       <div>
@@ -192,24 +274,25 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p class="footer-copy">© 2025 Likon Auto. Все права защищены.</p>
+      <p class="footer-copy">© 2026 Likon Auto. Все права защищены.</p>
       <div class="footer-socials">
-        <a href="https://wa.me/821090905971" target="_blank" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-        <a href="https://www.instagram.com/likon_auto" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-        <a href="https://www.tiktok.com/@likon_auto" target="_blank" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
-        <a href="https://www.linkedin.com/company/likon-auto/" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-        <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://wa.me/821090905971" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/likon_auto" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@likon_auto" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+        <a href="https://www.linkedin.com/company/likon-auto/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="https://www.facebook.com/share/18TSnmp6Mn/" target="_blank"><i class="fa-brands fa-facebook"></i></a>
       </div>
     </div>
   </div>
 </footer>
 
 <script>
+/* ── NAV / THEME ── */
 function toggleNav() { document.getElementById('navMobile').classList.toggle('open'); }
 window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('solid', scrollY > 40); });
 (function(){
   const saved = localStorage.getItem('likonTheme');
-  if(saved === 'light') { document.body.classList.add('light'); }
+  if (saved === 'light') document.body.classList.add('light');
   function syncIcon() {
     const isLight = document.body.classList.contains('light');
     document.querySelectorAll('.theme-toggle').forEach(btn => {
@@ -224,6 +307,48 @@ window.addEventListener('scroll', () => { document.getElementById('nav').classLi
   };
 })();
 
+/* ── GALLERY STATE ── */
+let photos = [];
+let currentIdx = 0;
+
+function showPhoto(idx) {
+  if (!photos.length) return;
+  currentIdx = (idx + photos.length) % photos.length;
+  const mainImg = document.getElementById('mainImg');
+  mainImg.classList.add('fade');
+  setTimeout(() => {
+    mainImg.src = photos[currentIdx];
+    mainImg.classList.remove('fade');
+  }, 150);
+  document.querySelectorAll('.gallery-thumb').forEach((t, i) => {
+    t.classList.toggle('active', i === currentIdx);
+    if (i === currentIdx) t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  });
+  document.getElementById('galleryCounter').textContent = `${currentIdx + 1} / ${photos.length}`;
+}
+
+/* ── FULLSCREEN ── */
+function openFs() {
+  document.getElementById('fsImg').src = photos[currentIdx];
+  document.getElementById('galleryFs').classList.add('open');
+}
+function closeFs() { document.getElementById('galleryFs').classList.remove('open'); }
+function fsNav(dir) {
+  currentIdx = (currentIdx + dir + photos.length) % photos.length;
+  document.getElementById('fsImg').src = photos[currentIdx];
+  showPhoto(currentIdx);
+}
+document.getElementById('galleryFs').addEventListener('click', function(e) {
+  if (e.target === this) closeFs();
+});
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('galleryFs').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') fsNav(-1);
+  if (e.key === 'ArrowRight') fsNav(1);
+  if (e.key === 'Escape') closeFs();
+});
+
+/* ── LOAD CAR ── */
 async function loadCar() {
   const id = new URLSearchParams(window.location.search).get('id');
   const container = document.getElementById('carPage');
@@ -232,7 +357,6 @@ async function loadCar() {
   try { cars = await (await fetch('/cars.json')).json(); } catch(e) {}
 
   const car = cars.find(c => c.id === id);
-
   if (!car) {
     container.innerHTML = `
       <div class="car-notfound">
@@ -244,6 +368,8 @@ async function loadCar() {
   }
 
   document.title = `${car.brand} ${car.model} ${car.year} — Likon Auto`;
+
+  photos = (car.images && car.images.length) ? car.images : (car.image ? [car.image] : []);
 
   const isReq = !car.price;
   const price = isReq ? null : '$' + car.price.toLocaleString('en-US');
@@ -260,55 +386,70 @@ async function loadCar() {
       <span class="spec-val">${v}</span>
     </div>`).join('');
 
+  const thumbsHTML = photos.map((src, i) => `
+    <img class="gallery-thumb${i === 0 ? ' active' : ''}" src="${src}" alt="Фото ${i+1}" onclick="showPhoto(${i})">`
+  ).join('');
+
   container.innerHTML = `
-    <div class="car-hero">
-      <div class="car-hero-img" style="background-image:url('${car.image}')"></div>
-      <div class="car-hero-overlay"></div>
-      <div class="car-hero-content">
-        <a href="/" class="car-hero-back">← Назад к каталогу</a>
-        <div class="car-hero-brand">${car.brand}</div>
-        <h1 class="car-hero-title">${car.model} <span style="color:var(--gold)">${car.year}</span></h1>
+    <div class="car-page">
+
+      <!-- GALLERY -->
+      <div class="car-gallery">
+        <div class="gallery-main" id="galleryMain">
+          <img id="mainImg" src="${photos[0] || ''}" alt="${car.brand} ${car.model}">
+          <button class="gallery-arrow gallery-prev" onclick="showPhoto(currentIdx - 1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button class="gallery-arrow gallery-next" onclick="showPhoto(currentIdx + 1)">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+          <div class="gallery-counter" id="galleryCounter">1 / ${photos.length}</div>
+        </div>
+        <div class="gallery-thumbs">${thumbsHTML}</div>
       </div>
-    </div>
 
-    <div class="car-main">
-      <div class="car-inner">
+      <!-- INFO -->
+      <div class="car-info">
+        <a href="/catalog.html" class="car-info-back">← Назад к каталогу</a>
+        <div class="car-info-brand">${car.brand}</div>
+        <h1 class="car-info-title">${car.model} <span style="color:var(--gold)">${car.year}</span></h1>
 
-        <!-- SPECS -->
-        <div class="car-specs-col">
-          <div class="spec-block">
-            <div class="spec-block-title">Характеристики</div>
-            ${specsRows}
-          </div>
+        <div class="spec-block-title">Характеристики</div>
+        ${specsRows}
 
-          <div class="price-block">
-            <div class="price-label">Цена</div>
-            ${isReq
-              ? `<div class="price-value req">Цена по запросу — напишите нам, подберём лучшее предложение</div>`
-              : `<div class="price-value">${price}</div>`
-            }
-            ${!isReq ? `<div class="price-note">Цена указана без учёта доставки и таможенного оформления. Уточняйте у менеджера.</div>` : ''}
-          </div>
+        <div class="price-block">
+          <div class="price-label">Цена</div>
+          ${isReq
+            ? `<div class="price-value req">Цена по запросу — напишите нам, подберём лучшее предложение</div>`
+            : `<div class="price-value">${price}</div>`}
+          ${!isReq ? `<div class="price-note">Цена указана без учёта доставки и таможенного оформления.</div>` : ''}
         </div>
 
-        <!-- DESCRIPTION + CTA -->
-        <div class="car-desc-col">
-          <div class="car-desc-label">Об автомобиле</div>
-          <h2 class="car-desc-title">${car.brand} ${car.model}</h2>
-          <div class="car-desc-rule"></div>
-          <p class="car-desc-text">${car.description || ''}</p>
+        <div class="car-desc-sep"></div>
+        <p class="car-desc-text">${car.description || ''}</p>
 
-          <div class="car-cta-title">Заинтересовал автомобиль?</div>
-          <div class="car-cta-btns">
-            <a href="https://wa.me/821090905971?text=${wa}" class="btn-wa" target="_blank">
-              <i class="fa-brands fa-whatsapp"></i> Написать в WhatsApp
-            </a>
-            <a href="/" class="btn-outline">← Назад к каталогу</a>
-          </div>
+        <div class="car-cta-title">Заинтересовал автомобиль?</div>
+        <div class="car-cta-btns">
+          <a href="https://wa.me/821090905971?text=${wa}" class="btn-wa" target="_blank">
+            <i class="fa-brands fa-whatsapp"></i> Написать в WhatsApp
+          </a>
+          <a href="/catalog.html" class="btn-outline">← Назад к каталогу</a>
         </div>
-
       </div>
+
     </div>`;
+
+  /* double-click → fullscreen */
+  document.getElementById('galleryMain').addEventListener('dblclick', openFs);
+
+  /* swipe on mobile */
+  let tx = 0;
+  const mainEl = document.getElementById('mainImg');
+  mainEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  mainEl.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) showPhoto(currentIdx + (dx < 0 ? 1 : -1));
+  });
 }
 
 loadCar();
