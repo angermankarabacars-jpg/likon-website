@@ -315,6 +315,11 @@ body.light nav.solid {
 /* Transparent nav: white text over dark hero */
 body.light nav:not(.solid) .nav-links a { color: rgba(255,255,255,0.75); }
 body.light nav:not(.solid) .nav-links a:hover { color: #fff; }
+body.light nav:not(.solid) .theme-toggle {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.35);
+  color: #fff;
+}
 /* Solid nav: dark text + black logo */
 body.light nav.solid .nav-links a { color: rgba(0,0,0,0.5); }
 body.light nav.solid .nav-links a:hover { color: #111; }
