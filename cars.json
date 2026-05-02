@@ -1,6 +1,6 @@
 [
   {
-    "id": "benz-e300-amg-line-2026",
+    "id": "12345",
     "brand": "Benz",
     "brandSlug": "benz",
     "model": "E300 AMG LINE",
@@ -26,7 +26,7 @@
     }
   },
   {
-    "id": "benz-e300-amg-line-2026",
+    "id": "22345",
     "brand": "Benz",
     "brandSlug": "benz",
     "model": "E300 AMG LINE",
@@ -52,7 +52,7 @@
     }
   },
   {
-    "id": "benz-glc300-2026",
+    "id": "32345",
     "brand": "Benz",
     "brandSlug": "benz",
     "model": "GLC300",
@@ -86,7 +86,7 @@
     }
   },
   {
-    "id": "benz-gls450d-2026",
+    "id": "42345",
     "brand": "Benz",
     "brandSlug": "benz",
     "model": "GLS450d",
@@ -115,7 +115,7 @@
     }
   },
   {
-    "id": "bmw-x3-20d-m-sport-2026",
+    "id": "52345",
     "brand": "BMW",
     "brandSlug": "bmw",
     "model": "X3 20d M Sport",
@@ -145,7 +145,7 @@
     }
   },
   {
-    "id": "benz-gle53-amg-2026",
+    "id": "62345",
     "brand": "Benz",
     "brandSlug": "benz",
     "model": "GLE53 AMG",
@@ -175,7 +175,7 @@
     }
   },
   {
-    "id": "lexus-lx-700h-luxury-2026",
+    "id": "72345",
     "brand": "Lexus",
     "brandSlug": "lexus",
     "model": "LX 700h Luxury",
@@ -205,7 +205,7 @@
     }
   },
   {
-    "id": "land-rover-range-rover-sport-p400-ab-2024",
+    "id": "82345",
     "brand": "Land Rover",
     "brandSlug": "land-rover",
     "model": "Range Rover Sport P400 AB",
@@ -215,22 +215,8 @@
     "mileage": 20,
     "price": 0,
     "fuel": "Gasoline",
-    "image": "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679823/1777630796379_fq3but.jpg",
-    "images": [
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679823/1777630796379_fq3but.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679820/1777630796483_vaq6kq.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679815/1777630796245_kb4c8n.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679812/1777630796441_qlucr9.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679804/1777630796770_t38qye.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679801/1777630796813_wdu870.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679798/1777630796888_rhskgx.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679797/1777630796850_wjh2qr.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679769/1777630796926_de8egn.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679722/1777630796731_u5ew3o.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679721/1777630796687_injodh.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679720/1777630796598_gicttt.jpg",
-      "https://res.cloudinary.com/droc3pvi3/image/upload/v1777679719/1777630796642_rlbwvw.jpg"
-    ],
+    "image": "",
+    "images": [],
     "description": "Range Rover Sport P400 (2024) — это премиальный спортивный внедорожник с 3.0-литровым рядным 6-цилиндровым турбодвигателем и системой mild hybrid (48V), сочетающий комфорт и динамику. Отличается современным дизайном, внедорожными возможностями и высоким уровнем отделки салона.",
     "description_en": "Range Rover Sport P400 (2024) is a luxury performance SUV that combines a 3.0L inline-6 turbo engine with a mild-hybrid system (48V), delivering a strong balance of comfort and sportiness. It features modern design, advanced off-road capability, and premium interior quality, making it one of the most versatile SUVs in its class.",
     "specs": {
@@ -239,7 +225,7 @@
     }
   },
   {
-    "id": "benz-g63-grand-edition-2024",
+    "id": "92345",
     "brand": "Benz",
     "brandSlug": "benz",
     "model": "G63 Grand Edition",
