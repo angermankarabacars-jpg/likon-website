@@ -218,18 +218,20 @@
     </a>
     <ul class="nav-links">
       <li class="nav-toggle-desktop"><button class="theme-toggle" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button></li>
-      <li><a href="/catalog.html">Каталог</a></li>
-      <li><a href="/about.html">О нас</a></li>
-      <li><a href="/contact.html" class="nav-btn">Связаться</a></li>
+      <li class="nav-lang-desktop"><button class="lang-toggle" onclick="toggleLang()"><span class="lang-label">EN</span></button></li>
+      <li><a href="/catalog.html" data-i18n="nav.catalog">Каталог</a></li>
+      <li><a href="/about.html" data-i18n="nav.about">О нас</a></li>
+      <li><a href="/contact.html" class="nav-btn" data-i18n="nav.contact">Связаться</a></li>
     </ul>
+    <button class="lang-toggle nav-lang-mobile" onclick="toggleLang()"><span class="lang-label">EN</span></button>
     <button class="theme-toggle nav-toggle-mobile" onclick="toggleTheme()" title="Переключить тему"><i class="fa-solid fa-moon"></i></button>
     <button class="nav-ham" onclick="toggleNav()"><span></span><span></span><span></span></button>
   </div>
 </nav>
 <div class="nav-mobile" id="navMobile">
-  <a href="/catalog.html">Каталог</a>
-  <a href="/about.html">О нас</a>
-  <a href="/contact.html">Связаться</a>
+  <a href="/catalog.html" data-i18n="nav.catalog">Каталог</a>
+  <a href="/about.html" data-i18n="nav.about">О нас</a>
+  <a href="/contact.html" data-i18n="nav.contact">Связаться</a>
 </div>
 
 <!-- CONTENT -->
@@ -352,6 +354,94 @@ document.addEventListener('keydown', e => {
 });
 
 /* ── LOAD CAR ── */
+let carData = null;
+
+function renderCarPage() {
+  if (!carData) return;
+  const car = carData;
+  const isEn = (localStorage.getItem('likonLang') || 'ru') === 'en';
+
+  const isReq = !car.price;
+  const price = isReq ? null : '$' + car.price.toLocaleString('en-US');
+  const wa = encodeURIComponent(`Здравствуйте, интересует ${car.brand} ${car.model} ${car.year} г. Подскажите подробнее.`);
+
+  const color    = isEn ? (car.color_en    || car.color)         : car.color;
+  const interior = isEn ? (car.interiorColor_en || car.interiorColor) : car.interiorColor;
+  const fuel     = isEn ? (car.fuel_en     || car.fuel)          : car.fuel;
+  const drive    = car.drive || (car.specs?.['Привод'] || '');
+  const engine   = car.specs?.['Двигатель'] || '';
+  const desc     = isEn ? (car.description_en || car.description) : car.description;
+
+  const specsRows = [
+    [isEn ? 'Year'           : 'Год выпуска',  car.year],
+    [isEn ? 'Exterior color' : 'Цвет кузова',  color],
+    interior ? [isEn ? 'Interior color' : 'Цвет салона', interior] : null,
+    [isEn ? 'Mileage'        : 'Пробег',       car.mileage.toLocaleString('ru-RU') + ' км'],
+    fuel   ? [isEn ? 'Fuel'  : 'Топливо',      fuel]   : null,
+    drive  ? [isEn ? 'Drive' : 'Привод',        drive]  : null,
+    engine ? [isEn ? 'Engine': 'Двигатель',     engine] : null,
+  ].filter(Boolean).map(([k, v]) => `
+    <div class="spec-row">
+      <span class="spec-key">${k}</span>
+      <span class="spec-val">${v}</span>
+    </div>`).join('');
+
+  const thumbsHTML = photos.map((src, i) => `
+    <img class="gallery-thumb${i === 0 ? ' active' : ''}" src="${src}" alt="Photo ${i+1}" onclick="showPhoto(${i})">`
+  ).join('');
+
+  document.getElementById('carPage').innerHTML = `
+    <div class="car-page">
+      <div class="car-gallery">
+        <div class="gallery-main" id="galleryMain">
+          <img id="mainImg" src="${photos[0] || ''}" alt="${car.brand} ${car.model}">
+          <button class="gallery-arrow gallery-prev" onclick="showPhoto(currentIdx - 1)"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="gallery-arrow gallery-next" onclick="showPhoto(currentIdx + 1)"><i class="fa-solid fa-chevron-right"></i></button>
+          <div class="gallery-counter" id="galleryCounter">1 / ${photos.length}</div>
+        </div>
+        <div class="gallery-thumbs">${thumbsHTML}</div>
+      </div>
+
+      <div class="car-info">
+        <a href="/catalog.html" class="car-info-back" data-i18n="car.back">← Назад к каталогу</a>
+        <div class="car-info-brand">${car.brand}</div>
+        <h1 class="car-info-title">${car.model} <span style="color:var(--gold)">${car.year}</span></h1>
+
+        <div class="spec-block-title" data-i18n="car.specs">${isEn ? 'Specifications' : 'Характеристики'}</div>
+        ${specsRows}
+
+        <div class="price-block">
+          <div class="price-label" data-i18n="car.price">${isEn ? 'Price' : 'Цена'}</div>
+          ${isReq
+            ? `<div class="price-value req" data-i18n="car.price.req">${isEn ? 'Price on request — contact us for the best offer' : 'Цена по запросу — напишите нам, подберём лучшее предложение'}</div>`
+            : `<div class="price-value">${price}</div>`}
+          ${!isReq ? `<div class="price-note" data-i18n="car.price.note">${isEn ? 'Price excludes shipping and customs clearance.' : 'Цена указана без учёта доставки и таможенного оформления.'}</div>` : ''}
+        </div>
+
+        <div class="car-desc-sep"></div>
+        <p class="car-desc-text">${desc || ''}</p>
+
+        <div class="car-cta-title" data-i18n="car.cta.title">${isEn ? 'Interested in this car?' : 'Заинтересовал автомобиль?'}</div>
+        <div class="car-cta-btns">
+          <a href="https://wa.me/821090905971?text=${wa}" class="btn-wa" target="_blank">
+            <i class="fa-brands fa-whatsapp"></i> <span data-i18n="car.wa">${isEn ? 'Message on WhatsApp' : 'Написать в WhatsApp'}</span>
+          </a>
+          <a href="/catalog.html" class="btn-outline" data-i18n="car.back2">${isEn ? '← Back to catalog' : '← Назад к каталогу'}</a>
+        </div>
+      </div>
+    </div>`;
+
+  showPhoto(currentIdx);
+  document.getElementById('galleryMain').addEventListener('dblclick', openFs);
+  let tx = 0;
+  const mainEl = document.getElementById('mainImg');
+  mainEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  mainEl.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) showPhoto(currentIdx + (dx < 0 ? 1 : -1));
+  });
+}
+
 async function loadCar() {
   const id = new URLSearchParams(window.location.search).get('id');
   const container = document.getElementById('carPage');
@@ -371,93 +461,23 @@ async function loadCar() {
   }
 
   document.title = `${car.brand} ${car.model} ${car.year} — Likon Auto`;
-
+  carData = car;
   photos = (car.images && car.images.length) ? car.images : (car.image ? [car.image] : []);
-
-  const isReq = !car.price;
-  const price = isReq ? null : '$' + car.price.toLocaleString('en-US');
-  const wa = encodeURIComponent(`Здравствуйте, интересует ${car.brand} ${car.model} ${car.year} г. (${car.color}, ${car.mileage.toLocaleString('ru-RU')} км). Подскажите подробнее.`);
-
-  const specsRows = [
-    ['Год выпуска', car.year],
-    ['Цвет кузова', car.color],
-    car.interiorColor ? ['Цвет салона', car.interiorColor] : null,
-    ['Пробег', car.mileage.toLocaleString('ru-RU') + ' км'],
-    car.fuel ? ['Топливо', car.fuel] : null,
-    ...(car.specs ? Object.entries(car.specs) : [])
-  ].filter(Boolean).map(([k, v]) => `
-    <div class="spec-row">
-      <span class="spec-key">${k}</span>
-      <span class="spec-val">${v}</span>
-    </div>`).join('');
-
-  const thumbsHTML = photos.map((src, i) => `
-    <img class="gallery-thumb${i === 0 ? ' active' : ''}" src="${src}" alt="Фото ${i+1}" onclick="showPhoto(${i})">`
-  ).join('');
-
-  container.innerHTML = `
-    <div class="car-page">
-
-      <!-- GALLERY -->
-      <div class="car-gallery">
-        <div class="gallery-main" id="galleryMain">
-          <img id="mainImg" src="${photos[0] || ''}" alt="${car.brand} ${car.model}">
-          <button class="gallery-arrow gallery-prev" onclick="showPhoto(currentIdx - 1)">
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
-          <button class="gallery-arrow gallery-next" onclick="showPhoto(currentIdx + 1)">
-            <i class="fa-solid fa-chevron-right"></i>
-          </button>
-          <div class="gallery-counter" id="galleryCounter">1 / ${photos.length}</div>
-        </div>
-        <div class="gallery-thumbs">${thumbsHTML}</div>
-      </div>
-
-      <!-- INFO -->
-      <div class="car-info">
-        <a href="/catalog.html" class="car-info-back">← Назад к каталогу</a>
-        <div class="car-info-brand">${car.brand}</div>
-        <h1 class="car-info-title">${car.model} <span style="color:var(--gold)">${car.year}</span></h1>
-
-        <div class="spec-block-title">Характеристики</div>
-        ${specsRows}
-
-        <div class="price-block">
-          <div class="price-label">Цена</div>
-          ${isReq
-            ? `<div class="price-value req">Цена по запросу — напишите нам, подберём лучшее предложение</div>`
-            : `<div class="price-value">${price}</div>`}
-          ${!isReq ? `<div class="price-note">Цена указана без учёта доставки и таможенного оформления.</div>` : ''}
-        </div>
-
-        <div class="car-desc-sep"></div>
-        <p class="car-desc-text">${car.description || ''}</p>
-
-        <div class="car-cta-title">Заинтересовал автомобиль?</div>
-        <div class="car-cta-btns">
-          <a href="https://wa.me/821090905971?text=${wa}" class="btn-wa" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i> Написать в WhatsApp
-          </a>
-          <a href="/catalog.html" class="btn-outline">← Назад к каталогу</a>
-        </div>
-      </div>
-
-    </div>`;
-
-  /* double-click → fullscreen */
-  document.getElementById('galleryMain').addEventListener('dblclick', openFs);
-
-  /* swipe on mobile */
-  let tx = 0;
-  const mainEl = document.getElementById('mainImg');
-  mainEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-  mainEl.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - tx;
-    if (Math.abs(dx) > 50) showPhoto(currentIdx + (dx < 0 ? 1 : -1));
-  });
+  currentIdx = 0;
+  renderCarPage();
 }
 
 loadCar();
+</script>
+<script src="/lang.js"></script>
+<script>
+  const _origToggle = window.toggleLang;
+  window.toggleLang = function() {
+    const lang = localStorage.getItem('likonLang') || 'ru';
+    localStorage.setItem('likonLang', lang === 'ru' ? 'en' : 'ru');
+    applyLang();
+    renderCarPage();
+  };
 </script>
 </body>
 </html>
