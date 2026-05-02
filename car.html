@@ -195,8 +195,6 @@
     body.light .price-block { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.09); }
     body.light .spec-row { border-color: rgba(0,0,0,0.08); }
 
-    /* Nav always solid on car page */
-    #nav { background: rgba(4,4,4,0.94); backdrop-filter: blur(18px); border-bottom-color: var(--border); }
 
     .car-notfound {
       min-height: 60vh; display: flex; flex-direction: column;
@@ -293,7 +291,8 @@
 <script>
 /* ── NAV / THEME ── */
 function toggleNav() { document.getElementById('navMobile').classList.toggle('open'); }
-window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('solid', scrollY > 40); });
+document.getElementById('nav').classList.add('solid');
+window.addEventListener('scroll', () => { document.getElementById('nav').classList.add('solid'); });
 (function(){
   const saved = localStorage.getItem('likonTheme');
   if (saved === 'light') document.body.classList.add('light');
