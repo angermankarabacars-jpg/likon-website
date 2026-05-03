@@ -1,8 +1,8 @@
 [
   {
     "id": "12345",
-    "brand": "Benz",
-    "brandSlug": "benz",
+    "brand": "Mercedes",
+    "brandSlug": "mercedes",
     "model": "E300 AMG LINE",
     "year": 2026,
     "color": "Черный",
@@ -31,8 +31,8 @@
   },
   {
     "id": "22345",
-    "brand": "Benz",
-    "brandSlug": "benz",
+    "brand": "Mercedes",
+    "brandSlug": "mercedes",
     "model": "E300 AMG LINE",
     "year": 2026,
     "color": "Альпийский Серый",
@@ -61,8 +61,8 @@
   },
   {
     "id": "32345",
-    "brand": "Benz",
-    "brandSlug": "benz",
+    "brand": "Mercedes",
+    "brandSlug": "mercedes",
     "model": "GLC300",
     "year": 2026,
     "color": "Альпийский Серый",
@@ -99,8 +99,8 @@
   },
   {
     "id": "42345",
-    "brand": "Benz",
-    "brandSlug": "benz",
+    "brand": "Mercedes",
+    "brandSlug": "mercedes",
     "model": "GLS450d",
     "year": 2026,
     "color": "Черный",
@@ -166,8 +166,8 @@
   },
   {
     "id": "62345",
-    "brand": "Benz",
-    "brandSlug": "benz",
+    "brand": "Mercedes",
+    "brandSlug": "mercedes",
     "model": "GLE53 AMG",
     "year": 2026,
     "color": "Черный",
@@ -272,8 +272,8 @@
   },
   {
     "id": "92345",
-    "brand": "Benz",
-    "brandSlug": "benz",
+    "brand": "Mercedes",
+    "brandSlug": "mercedes",
     "model": "G63 Grand Edition",
     "year": 2024,
     "color": "Черный",
