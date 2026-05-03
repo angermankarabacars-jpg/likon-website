@@ -81,6 +81,8 @@ const TRANSLATIONS = {
     'contact.how.1.title': 'Выберите или опишите автомобиль', 'contact.how.1.desc': 'Просмотрите каталог или напишите нам параметры: марка, модель, год, бюджет, цвет. Любые пожелания приветствуются.',
     'contact.how.2.title': 'Получите предложение', 'contact.how.2.desc': 'Мы подберём варианты на корейском рынке с ценами, фото и историей. Обычно это занимает от нескольких часов до суток.',
     'contact.how.3.title': 'Согласуйте и подтвердите', 'contact.how.3.desc': 'После согласования всех условий организуем покупку и доставку. Вы получаете автомобиль в порту назначения.',
+    // SIMILAR CARS
+    'car.similar.label': 'Похожие автомобили', 'car.similar.title': 'Вам также может понравиться',
   },
   en: {
     // NAV
@@ -164,6 +166,8 @@ const TRANSLATIONS = {
     'contact.how.1.title': 'Choose or describe a car', 'contact.how.1.desc': 'Browse the catalog or send us your parameters: make, model, year, budget, colour. Any wishes welcome.',
     'contact.how.2.title': 'Receive an offer', 'contact.how.2.desc': 'We will find options on the Korean market with prices, photos and history. This usually takes a few hours to one day.',
     'contact.how.3.title': 'Confirm and proceed', 'contact.how.3.desc': 'Once all terms are agreed, we organise purchase and delivery. You receive the car at the destination port.',
+    // SIMILAR CARS
+    'car.similar.label': 'Similar cars', 'car.similar.title': 'You might also like',
   }
 };
 
